@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
-    public class NormalTileState : MonoBehaviour,ITileState
+    public class NormalTileState : ITileState
     {
         public string m_stateName => "NormalTileState";
 

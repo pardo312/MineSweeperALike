@@ -2,6 +2,10 @@
 using JiufenModules.ScoreModule.Example;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,12 +20,48 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion References
 
         #region Class Fields
-        public List<ITileState> m_tileStates => InterfaceUnityRefereceValidator.ValidateIfUnityObjectArrayIsOfType<ITileState>(m_tileStatesField);
+        public List<ITileState> m_tileStates => ValidateIfUnityObjectArrayIsOfType<ITileState>(m_tileStatesField, "JiufenGames.MineSweeperAlike.Gameplay.Logic.");
+        public ITileState testState;
         public Dictionary<string, ITileState> m_tileStateDictionary = new Dictionary<string, ITileState>();
         public ITileState m_currentState;
         public bool m_isMine = false;
         #endregion Class Fields
         #endregion ----Fields----
+
+        public List<T> ValidateIfUnityObjectArrayIsOfType<T>(UnityEngine.Object[] unityObjects, string classNamespace = null)
+        {
+            List<T> returnList = new List<T>();
+            for (int i = 0; i < unityObjects.Length; i++)
+            {
+                UnityEngine.Object item = unityObjects[i];
+
+                if (item == null)
+                    continue;
+
+
+                if ((object)item is T)
+                {
+                    returnList.Add((T)(object)item);
+                }
+                else if (item is GameObject && (item as GameObject).GetComponent<T>() != null)
+                {
+                    returnList.Add((item as GameObject).GetComponent<T>());
+                }
+                else
+                {
+                    Type classType = Type.GetType(classNamespace + item.name);
+                    if (classType != null)
+                    {
+                        returnList.Add((T)Activator.CreateInstance(classType));
+                        continue;
+                    }
+                    Debug.LogError($"<color=red>ValidateInterface:</color>  The item: [{item.name}] is not a {typeof(T).Name} subclass. Please check the reference");
+                }
+            }
+
+            //Return List
+            return returnList;
+        }
 
         #region ----Methods----
         public override void Awake()

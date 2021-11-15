@@ -5,7 +5,7 @@ using UnityEngine;
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
 
-    public class SweptTileState : MonoBehaviour,ITileState
+    public class SweptTileState : ITileState
     {
         public string m_stateName => "SweptTileState";
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
 
-    public class FlaggedTileState : MonoBehaviour, ITileState
+    public class FlaggedTileState : ITileState
     {
         public string m_stateName => "FlaggedTileState";
 
