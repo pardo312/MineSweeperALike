@@ -27,6 +27,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             {
                 numberOfRows = row;
                 numberOfColumns = column;
+
             });
             numberOfRows += 1;
             numberOfColumns += 1;
@@ -60,6 +61,33 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
 
                 m_board[randomRow, randomColumn].m_isMine = true;
             }
+            SetNumberBaseOnMinesAroundIt(numberOfRows, numberOfColumns);
+        }
+        private void SetNumberBaseOnMinesAroundIt(int rows, int columns)
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    int numberOfMines = 0;
+                    for (int k = -1; k <= 1; k++)
+                        for (int l = -1; l <= 1; l++)
+                            CheckMineOnAdjacentTile(i - k, j - l, ref numberOfMines);
+                    m_board[i, j].numberOfMinesAround = numberOfMines;
+                }
+            }
+        }
+        private void CheckMineOnAdjacentTile(int row, int column, ref int numberOfMines)
+        {
+            if (row == 0 && column == 0)
+                return;
+            if (m_board.GetLength(0) >= row && row >= 0)
+                return;
+            if (m_board.GetLength(1) >= row && row >= 0)
+                return;
+            if (m_board[row, column].m_isMine)
+                return;
+            numberOfMines++;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using JiufenGames.TetrisAlike.Logic;
-using JiufenModules.ScoreModule.Example;
+using JiufenModules.InterfaceReferenceValidator;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,11 +7,12 @@ using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
-    public class MineSweeperTile : TileBase
+    public class MineSweeperTile : TileBase, IPointerClickHandler
     {
         #region ----Fields----
         #region References
@@ -19,49 +20,17 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         [SerializeField] private UnityEngine.Object[] m_tileStatesField;
         #endregion References
 
+        #region Properties
+        public List<ITileState> m_tileStates => InterfaceUnityRefereceValidator.ValidateIfUnityObjectArrayIsOfType<ITileState>(m_tileStatesField, "JiufenGames.MineSweeperAlike.Gameplay.Logic.", Assembly.GetExecutingAssembly().FullName);
+        #endregion Properties
+
         #region Class Fields
-        public List<ITileState> m_tileStates => ValidateIfUnityObjectArrayIsOfType<ITileState>(m_tileStatesField, "JiufenGames.MineSweeperAlike.Gameplay.Logic.");
-        public ITileState testState;
         public Dictionary<string, ITileState> m_tileStateDictionary = new Dictionary<string, ITileState>();
         public ITileState m_currentState;
         public bool m_isMine = false;
+        public int numberOfMinesAround = 0;
         #endregion Class Fields
         #endregion ----Fields----
-
-        public List<T> ValidateIfUnityObjectArrayIsOfType<T>(UnityEngine.Object[] unityObjects, string classNamespace = null)
-        {
-            List<T> returnList = new List<T>();
-            for (int i = 0; i < unityObjects.Length; i++)
-            {
-                UnityEngine.Object item = unityObjects[i];
-
-                if (item == null)
-                    continue;
-
-
-                if ((object)item is T)
-                {
-                    returnList.Add((T)(object)item);
-                }
-                else if (item is GameObject && (item as GameObject).GetComponent<T>() != null)
-                {
-                    returnList.Add((item as GameObject).GetComponent<T>());
-                }
-                else
-                {
-                    Type classType = Type.GetType(classNamespace + item.name);
-                    if (classType != null)
-                    {
-                        returnList.Add((T)Activator.CreateInstance(classType));
-                        continue;
-                    }
-                    Debug.LogError($"<color=red>ValidateInterface:</color>  The item: [{item.name}] is not a {typeof(T).Name} subclass. Please check the reference");
-                }
-            }
-
-            //Return List
-            return returnList;
-        }
 
         #region ----Methods----
         public override void Awake()
@@ -71,17 +40,24 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 m_tileStateDictionary.Add(tileState.m_stateName, tileState);
             }
             GetDefaultTileData();
-            m_currentState = m_tileStateDictionary["NormalTileState"];
-            m_currentState.InitState();
+            ChangeTileData(new object[1] { "NormalTileState" });
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+                m_currentState.Sweep();
+            else if (eventData.button == PointerEventData.InputButton.Right)
+                m_currentState.Flag();
         }
 
         public override object[] ChangeTileData(object[] _methodParams = null)
         {
             base.ChangeTileData(_methodParams);
-            if (_methodParams != null && _methodParams.Length > 0 && _methodParams.GetType() == typeof(string))
+            if (_methodParams != null && _methodParams.Length > 0 && _methodParams[0].GetType() == typeof(string))
             {
                 m_currentState = m_tileStateDictionary[(string)_methodParams[0]];
-                m_currentState.InitState();
+                m_currentState.InitState(this);
                 m_tileImage.sprite = m_currentState.m_stateSprite;
                 return new object[1] { true };
             }
@@ -95,13 +71,6 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         {
             return null;
         }
-
-
         #endregion ----Methods----
-    }
-
-    public class StateFactory
-    {
-
     }
 }

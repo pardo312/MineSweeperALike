@@ -9,7 +9,10 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
     {
         string m_stateName { get; }
         Sprite m_stateSprite { get; }
+        MineSweeperTile m_tileBase { get; }
 
-        Sprite InitState();
+        Sprite InitState(MineSweeperTile tileBase);
+        void Sweep();
+        void Flag();
     }
 }
