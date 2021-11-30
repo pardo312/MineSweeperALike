@@ -36,7 +36,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 //Base.endGame
                 Debug.Break();
             }
-            m_tileBase.ChangeTileData(new object[1] { "SweptTileState" });
+            m_tileBase.ChangeTileData(new object[2] { "SweptTileState" , true});
         }
 
         public void Flag()

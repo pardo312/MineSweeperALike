@@ -341,7 +341,7 @@ MonoBehaviour:
   m_tilePrefabField: {fileID: 136516829091565809, guid: ae03b5adf9a30674b9e2c021a3e1cf1c, type: 3}
   m_tileParentField: {fileID: 1138068431}
   m_boardBackground: {fileID: 1812111845}
-  m_numberOfBombs: 40
+  m_numberOfBombs: 10
   m_sizeOfSquare: 1.2
 --- !u!1 &501405605
 GameObject:

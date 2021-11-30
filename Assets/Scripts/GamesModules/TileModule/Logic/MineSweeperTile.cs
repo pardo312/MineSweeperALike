@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,6 +18,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region ----Fields----
         #region References
         [SerializeField] private Image m_tileImage;
+        [SerializeField] private TMP_Text m_numberOfMinesTextField;
         [SerializeField] private UnityEngine.Object[] m_tileStatesField;
         #endregion References
 
@@ -28,8 +30,11 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public Dictionary<string, ITileState> m_tileStateDictionary = new Dictionary<string, ITileState>();
         public ITileState m_currentState;
         public bool m_isMine = false;
-        public int numberOfMinesAround = 0;
+        public int m_numberOfMinesAround = 0;
         #endregion Class Fields
+        #region Actions
+        public event Action OnClearTileSweep;
+        #endregion Actions
         #endregion ----Fields----
 
         #region ----Methods----
@@ -54,11 +59,28 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public override object[] ChangeTileData(object[] _methodParams = null)
         {
             base.ChangeTileData(_methodParams);
-            if (_methodParams != null && _methodParams.Length > 0 && _methodParams[0].GetType() == typeof(string))
+            if (_methodParams != null)
             {
-                m_currentState = m_tileStateDictionary[(string)_methodParams[0]];
-                m_currentState.InitState(this);
-                m_tileImage.sprite = m_currentState.m_stateSprite;
+                if (_methodParams.Length > 0 && _methodParams[0].GetType() == typeof(string))
+                {
+                    m_currentState = m_tileStateDictionary[(string)_methodParams[0]];
+                    m_currentState.InitState(this);
+                    m_tileImage.sprite = m_currentState.m_stateSprite;
+                }
+                if (_methodParams.Length > 1 && _methodParams[1].GetType() == typeof(bool) && (bool)_methodParams[1])
+                {
+                    if (!m_isMine)
+                    {
+                        if (m_numberOfMinesAround != 0)
+                        {
+                            m_numberOfMinesTextField.text = m_numberOfMinesAround.ToString();
+                        }
+                        else
+                        {
+                            OnClearTileSweep?.Invoke();
+                        }
+                    }
+                }
                 return new object[1] { true };
             }
             else
