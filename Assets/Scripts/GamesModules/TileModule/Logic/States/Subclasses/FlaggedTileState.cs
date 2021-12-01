@@ -1,6 +1,7 @@
 ﻿using JiufenGames.TetrisAlike.Logic;
 using System;
 using UnityEngine;
+using JiufenGames.MineSweeperAlike.Gameplay.Model;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
@@ -39,7 +40,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
         public void Flag()
         {
-            m_tileBase.ChangeTileData(new object[1] { "NormalTileState" });
+            m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState", DeFlagMine = true });
         }
     }
 }

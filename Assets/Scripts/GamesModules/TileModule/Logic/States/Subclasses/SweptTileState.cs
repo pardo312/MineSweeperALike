@@ -27,11 +27,11 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public Sprite InitState(MineSweeperTile tileBase)
         {
             m_tileBaseField = tileBase;
-            //Set Sprite
             if (tileBase.m_isMine)
             {
+                //EndGame
+                tileBase.EndGame();
                 m_stateSpriteField = Resources.Load<Sprite>("Sprites/TileStates/Mine");
-                //Base.endGame
             }
             else
             {

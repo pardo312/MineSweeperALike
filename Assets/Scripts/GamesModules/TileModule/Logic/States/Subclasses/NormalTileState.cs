@@ -1,4 +1,5 @@
-﻿using JiufenGames.TetrisAlike.Logic;
+﻿using JiufenGames.MineSweeperAlike.Gameplay.Model;
+using JiufenGames.TetrisAlike.Logic;
 using System;
 using UnityEngine;
 
@@ -31,22 +32,12 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
         public void Sweep()
         {
-            if (m_tileBase.m_isMine)
-            {
-                //Base.endGame
-                Debug.Break();
-            }
-            m_tileBase.ChangeTileData(new object[2] { "SweptTileState" , true});
+            m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "SweptTileState", Sweeping = true });
         }
 
         public void Flag()
         {
-            if (m_tileBase.m_isMine)
-            {
-                //Base.minesLeftMinus1
-            }
-            //Base.FlagsMinus1
-            m_tileBase.ChangeTileData(new object[1] { "FlaggedTileState" });
+            m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "FlaggedTileState", FlaggingTile = true });
         }
     }
 }

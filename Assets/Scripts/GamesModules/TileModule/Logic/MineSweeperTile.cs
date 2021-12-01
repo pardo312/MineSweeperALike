@@ -1,4 +1,5 @@
-﻿using JiufenGames.TetrisAlike.Logic;
+﻿using JiufenGames.MineSweeperAlike.Gameplay.Model;
+using JiufenGames.TetrisAlike.Logic;
 using JiufenModules.InterfaceReferenceValidator;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Class Fields
         #region Actions
         public event Action OnClearTileSweep;
+        public event Action<bool> OnFlaggedTile;
+        public event Action<bool> OnDeFlagMine;
         #endregion Actions
         #endregion ----Fields----
 
@@ -45,7 +48,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 m_tileStateDictionary.Add(tileState.m_stateName, tileState);
             }
             GetDefaultTileData();
-            ChangeTileData(new object[1] { "NormalTileState" });
+            ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState" });
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -56,18 +59,28 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 m_currentState.Flag();
         }
 
-        public override object[] ChangeTileData(object[] _methodParams = null)
+        /// <summary>
+        /// Change Tile Data  
+        /// </summary>
+        /// <param name="_methodParams[0](string)">State to change</param>
+        /// <param name="_methodParams[1](bool)">Sweeping: is sweeping</param>
+        /// <param name="_methodParams[2](bool)">Flagged: is bomb or not</param>
+        /// <returns></returns>
+        public override object ChangeTileData(object _payload = null)
         {
-            base.ChangeTileData(_methodParams);
-            if (_methodParams != null)
+            base.ChangeTileData(_payload);
+            if (_payload != null && _payload.GetType() == typeof(MineDataPayload))
             {
-                if (_methodParams.Length > 0 && _methodParams[0].GetType() == typeof(string))
+                MineDataPayload mineDataPayload = (MineDataPayload)_payload;
+
+                if (!String.IsNullOrEmpty(mineDataPayload.StateToChange))
                 {
-                    m_currentState = m_tileStateDictionary[(string)_methodParams[0]];
+                    m_currentState = m_tileStateDictionary[mineDataPayload.StateToChange];
                     m_currentState.InitState(this);
                     m_tileImage.sprite = m_currentState.m_stateSprite;
                 }
-                if (_methodParams.Length > 1 && _methodParams[1].GetType() == typeof(bool) && (bool)_methodParams[1])
+
+                if (mineDataPayload.Sweeping)
                 {
                     if (!m_isMine)
                     {
@@ -81,17 +94,31 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                         }
                     }
                 }
-                return new object[1] { true };
+                else if (mineDataPayload.FlaggingTile)
+                {
+                    OnFlaggedTile?.Invoke(m_isMine);
+                }
+                else if (mineDataPayload.DeFlagMine)
+                {
+                    OnDeFlagMine?.Invoke(m_isMine);
+                }
+
+                return true;
             }
             else
             {
-                return new object[1] { false };
+                return false;
             }
         }
 
-        public override object[] GetDefaultTileData()
+        public override object GetDefaultTileData()
         {
             return null;
+        }
+        public void EndGame()
+        {
+            Debug.Log("YOU LOSE");
+            Debug.Break();
         }
         #endregion ----Methods----
     }

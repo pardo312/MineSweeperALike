@@ -11,9 +11,11 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
     {
         [SerializeField] private RectTransform m_boardBackground;
 
-        [SerializeField, Range(1, 40)] private int m_numberOfBombs = 10;
+        [SerializeField, Range(1, 40)] public int m_numberOfBombs = 10;
         [SerializeField, Range(0, 2)] private float m_sizeOfSquare = 1;
         public event Action<int, int> OnClearTileSweep;
+        public event Action<bool, int, int> OnFlag;
+        public event Action<bool, int, int> OnDeFlag;
         public override void Init()
         {
             CreateBoard(new SquareTilesBoardPayload() { _squareSize = m_sizeOfSquare });
@@ -30,6 +32,12 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 numberOfColumns = column;
                 m_board[row, column].OnClearTileSweep -= () => OnClearTileSweep?.Invoke(row, column);
                 m_board[row, column].OnClearTileSweep += () => OnClearTileSweep?.Invoke(row, column);
+
+                m_board[row, column].OnFlaggedTile -= (isMine) => OnFlag?.Invoke(isMine, row, column);
+                m_board[row, column].OnFlaggedTile += (isMine) => OnFlag?.Invoke(isMine, row, column);
+
+                m_board[row, column].OnDeFlagMine -= (isMine) => OnDeFlag?.Invoke(isMine, row, column);
+                m_board[row, column].OnDeFlagMine += (isMine) => OnDeFlag?.Invoke(isMine, row, column);
             });
             numberOfRows += 1;
             numberOfColumns += 1;
@@ -74,8 +82,15 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 {
                     int numberOfMines = 0;
                     for (int k = -1; k <= 1; k++)
+                    {
+
                         for (int l = -1; l <= 1; l++)
+                        {
+                            if (k == 0 && l == 0)
+                                continue;
                             CheckMineOnAdjacentTile(i + k, j + l, ref numberOfMines);
+                        }
+                    }
                     m_board[i, j].m_numberOfMinesAround = numberOfMines;
                 }
             }
@@ -83,16 +98,14 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
 
         private void CheckMineOnAdjacentTile(int row, int column, ref int numberOfMines)
         {
-            if (row == 0 && column == 0)
+            if (m_board.GetLength(0) <= row || row < 0)
                 return;
-            if (m_board.GetLength(0) <= row || row <= 0)
-                return;
-            if (m_board.GetLength(1) <= column || column <= 0)
+            if (m_board.GetLength(1) <= column || column < 0)
                 return;
             if (!m_board[row, column].m_isMine)
                 return;
             numberOfMines++;
         }
-    }
 
+    }
 }
