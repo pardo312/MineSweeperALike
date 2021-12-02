@@ -33,10 +33,12 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public bool m_isMine = false;
         public int m_numberOfMinesAround = 0;
         #endregion Class Fields
+
         #region Actions
-        public event Action OnClearTileSweep;
-        public event Action<bool> OnFlaggedTile;
-        public event Action<bool> OnDeFlagMine;
+        public event Action a_OnClearTileSweep;
+        public event Action<bool> a_OnFlaggedTile;
+        public event Action<bool> a_OnDeFlagMine;
+        public event Action a_OnExplodeMine;
         #endregion Actions
         #endregion ----Fields----
 
@@ -90,17 +92,17 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                         }
                         else
                         {
-                            OnClearTileSweep?.Invoke();
+                            a_OnClearTileSweep?.Invoke();
                         }
                     }
                 }
                 else if (mineDataPayload.FlaggingTile)
                 {
-                    OnFlaggedTile?.Invoke(m_isMine);
+                    a_OnFlaggedTile?.Invoke(m_isMine);
                 }
                 else if (mineDataPayload.DeFlagMine)
                 {
-                    OnDeFlagMine?.Invoke(m_isMine);
+                    a_OnDeFlagMine?.Invoke(m_isMine);
                 }
 
                 return true;
@@ -115,10 +117,10 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         {
             return null;
         }
-        public void EndGame()
+
+        public void ExplodeMine()
         {
-            Debug.Log("YOU LOSE");
-            Debug.Break();
+            a_OnExplodeMine?.Invoke();
         }
         #endregion ----Methods----
     }

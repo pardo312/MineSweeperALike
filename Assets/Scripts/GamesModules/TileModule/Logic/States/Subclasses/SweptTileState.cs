@@ -24,13 +24,14 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Properties
         #endregion Fields
 
+        #region Methods
+        #region Init
         public Sprite InitState(MineSweeperTile tileBase)
         {
             m_tileBaseField = tileBase;
             if (tileBase.m_isMine)
             {
-                //EndGame
-                tileBase.EndGame();
+                tileBase.ExplodeMine();
                 m_stateSpriteField = Resources.Load<Sprite>("Sprites/TileStates/Mine");
             }
             else
@@ -39,15 +40,12 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             }
             return m_stateSprite;
         }
+        #endregion Init
 
-        public void Sweep()
-        {
-            return;
-        }
-
-        public void Flag()
-        {
-            return;
-        }
+        #region Not Used State Methods
+        public void Sweep() { }
+        public void Flag() { }
+        #endregion Not Used State Methods
+        #endregion Methods
     }
 }

@@ -23,13 +23,18 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Properties
         #endregion Fields
 
+        #region Methods
+        #region Init
         public Sprite InitState(MineSweeperTile tileBase)
         {
             m_tileBaseField = tileBase;
-            m_stateSpriteField = Resources.Load<Sprite>("Sprites/TileStates/Normal");
+            if(m_stateSpriteField == null)
+                m_stateSpriteField = Resources.Load<Sprite>("Sprites/TileStates/Normal");
             return m_stateSprite;
         }
+        #endregion Init
 
+        #region Used State Methods
         public void Sweep()
         {
             m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "SweptTileState", Sweeping = true });
@@ -39,5 +44,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         {
             m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "FlaggedTileState", FlaggingTile = true });
         }
+        #endregion Used State Methods
+        #endregion Methods
     }
 }

@@ -20,7 +20,5 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Model
         public bool Sweeping;
         public bool FlaggingTile;
         public bool DeFlagMine;
-
-        public bool EndGame;
     }
 }
