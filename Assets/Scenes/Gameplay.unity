@@ -137,7 +137,7 @@ GameObject:
   m_Layer: 5
   m_Name: Board_BG
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: 4fbf0adfca9ea7d40ab626b315fa12b8, type: 3}
+  m_Icon: {fileID: 2800000, guid: d8963e031312429cbded9f142ee7e54a, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -703,7 +703,7 @@ GameObject:
   m_Layer: 5
   m_Name: Board_Container
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: 4fbf0adfca9ea7d40ab626b315fa12b8, type: 3}
+  m_Icon: {fileID: 2800000, guid: 2a53e789b4df42be8b858d6c9c31e0a2, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -747,7 +747,7 @@ GameObject:
   m_Layer: 0
   m_Name: TileStates
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: d8963e031312429cbded9f142ee7e54a, type: 3}
+  m_Icon: {fileID: 2800000, guid: 21915c7187664e61ada712c6939873ce, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -821,7 +821,7 @@ GameObject:
   m_Layer: 5
   m_Name: Bottom_Panel
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: 4fbf0adfca9ea7d40ab626b315fa12b8, type: 3}
+  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -858,7 +858,7 @@ GameObject:
   m_Layer: 5
   m_Name: Top_Panel
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: 4fbf0adfca9ea7d40ab626b315fa12b8, type: 3}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -927,7 +927,7 @@ GameObject:
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: d8963e031312429cbded9f142ee7e54a, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -988,36 +988,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812111844}
   m_CullTransparentMesh: 1
---- !u!1 &1926472832
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1926472833}
-  m_Layer: 0
-  m_Name: ----World----
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1926472833
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926472832}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 234.97354, y: 620.3357, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1995327037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,7 +1002,7 @@ GameObject:
   m_Layer: 5
   m_Name: Tool_BG
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: 4fbf0adfca9ea7d40ab626b315fa12b8, type: 3}
+  m_Icon: {fileID: 2800000, guid: d8963e031312429cbded9f142ee7e54a, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
