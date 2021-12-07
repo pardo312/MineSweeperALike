@@ -161,6 +161,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         private void FlagTile(bool _isMine, int _row, int _column)
         {
             m_flagsLeftController.FlagTile(_isMine);
+            if (m_notClearedTiles <= 0 && m_flagsLeftController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
+                EndGame(true);
         }
         #endregion Flagging
         #endregion Methods
