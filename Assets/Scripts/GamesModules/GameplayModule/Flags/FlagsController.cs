@@ -34,7 +34,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         /// Flag tile 
         /// </summary>
         /// <returns>Is end of the game</returns>
-        public bool FlagTile(bool _isMine, int _totalNumberOfMines)
+        public void FlagTile(bool _isMine)
         {
             if (_isMine)
                 m_flaggedMines++;
@@ -44,6 +44,9 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
             m_flagsView.UpdateFlagsCounter(m_numberOfFlagsLeft);
 
+        }
+        public bool AreAllMinesFlagged(int _totalNumberOfMines)
+        {
             if (m_flaggedMines == _totalNumberOfMines && m_numberOfFlagsLeft == 0)
                 return true;
 

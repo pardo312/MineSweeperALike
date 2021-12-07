@@ -36,6 +36,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Class Fields
 
         #region Actions
+        public event Action a_OnNormalTileSweep;
         public event Action a_OnClearTileSweep;
         public event Action<bool> a_OnFlaggedTile;
         public event Action<bool> a_OnDeFlagMine;
@@ -95,6 +96,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                         if (m_numberOfMinesAround != 0)
                         {
                             m_numberOfMinesTextField.text = m_numberOfMinesAround.ToString();
+                            a_OnNormalTileSweep?.Invoke();
                         }
                         else
                         {

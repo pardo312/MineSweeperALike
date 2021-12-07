@@ -12,9 +12,11 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
     {
         [SerializeField] private RectTransform m_boardBackground;
 
+        public int m_numberOfTiles = 0;
         [SerializeField, Range(1, 40)] public int m_numberOfBombs = 10;
         [SerializeField, Range(0, 2)] private float m_sizeOfSquare = 1;
 
+        public event Action a_OnNormalTileSweep;
         public event Action<int, int> a_OnClearTileSweep;
 
         public event Action a_PressedInputFlag;
@@ -41,6 +43,9 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 numberOfRows = row;
                 numberOfColumns = column;
 
+                m_board[row, column].a_OnNormalTileSweep -= () => a_OnNormalTileSweep?.Invoke();
+                m_board[row, column].a_OnNormalTileSweep += () => a_OnNormalTileSweep?.Invoke();
+
                 m_board[row, column].a_OnClearTileSweep -= () => a_OnClearTileSweep?.Invoke(row, column);
                 m_board[row, column].a_OnClearTileSweep += () => a_OnClearTileSweep?.Invoke(row, column);
 
@@ -56,6 +61,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             });
             numberOfRows += 1;
             numberOfColumns += 1;
+            m_numberOfTiles = numberOfRows * numberOfColumns;
 
             //----Set Background----
             RectTransform parentRectTransform = m_tileParent.GetComponent<RectTransform>();
