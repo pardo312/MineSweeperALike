@@ -6,12 +6,15 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
     public class GameplayController : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private GameObject m_panelLose;
+        [SerializeField] private GameObject m_panelWin;
         [SerializeField] private BoardController m_boardController;
         [SerializeField] private FlagsController m_flagsLeftController;
         private int m_notClearedTiles = 0;
@@ -64,11 +67,15 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         private void EndGame(bool won)
         {
             if (won)
+            {
                 Debug.Log("YOU WIN");
+                m_panelWin.SetActive(true);
+            }
             else
+            {
                 Debug.Log("YOU LOSE");
-
-            Debug.Break();
+                m_panelLose.SetActive(true);
+            }
         }
         #endregion GameFlow
 
