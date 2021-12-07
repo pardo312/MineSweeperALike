@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JiufenGames.MineSweeperAlike.Board.Logic
 {
@@ -15,9 +16,16 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
         [SerializeField, Range(0, 2)] private float m_sizeOfSquare = 1;
 
         public event Action<int, int> a_OnClearTileSweep;
+
+        public event Action a_PressedInputFlag;
+        public event Action a_PressedInputSweep;
+
         public event Action<bool, int, int> a_OnFlag;
         public event Action<bool, int, int> a_OnDeFlag;
+
         public event Action a_OnExplodeMine;
+
+        public event Action<string, MineSweeperTile, Action<Sprite>> a_OnChangeState;
         public override void Init()
         {
             CreateBoard(new SquareTilesBoardPayload() { _squareSize = m_sizeOfSquare });
@@ -32,6 +40,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             {
                 numberOfRows = row;
                 numberOfColumns = column;
+
                 m_board[row, column].a_OnClearTileSweep -= () => a_OnClearTileSweep?.Invoke(row, column);
                 m_board[row, column].a_OnClearTileSweep += () => a_OnClearTileSweep?.Invoke(row, column);
 
@@ -42,7 +51,8 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 m_board[row, column].a_OnDeFlagMine += (isMine) => a_OnDeFlag?.Invoke(isMine, row, column);
 
                 m_board[row, column].a_OnExplodeMine -= () => a_OnExplodeMine?.Invoke();
-                m_board[row, column].a_OnExplodeMine  += () => a_OnExplodeMine?.Invoke();
+                m_board[row, column].a_OnExplodeMine += () => a_OnExplodeMine?.Invoke();
+
             });
             numberOfRows += 1;
             numberOfColumns += 1;

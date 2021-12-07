@@ -10,16 +10,16 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Fields
         #region Class Fields
         public string m_stateName => "NormalTileState";
+        public bool m_canFlag = false;
+        public bool m_canSweep = false;
         #endregion Class Fields
 
         #region BackingFields
         public Sprite m_stateSpriteField;
-        public MineSweeperTile m_tileBaseField;
         #endregion BackingFields
 
         #region Properties
         public Sprite m_stateSprite => m_stateSpriteField;
-        public MineSweeperTile m_tileBase => m_tileBaseField;
         #endregion Properties
         #endregion Fields
 
@@ -27,23 +27,24 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Init
         public Sprite InitState(MineSweeperTile tileBase)
         {
-            m_tileBaseField = tileBase;
-            if(m_stateSpriteField == null)
+            if (m_stateSpriteField == null)
                 m_stateSpriteField = Resources.Load<Sprite>("Sprites/TileStates/Normal");
             return m_stateSprite;
         }
         #endregion Init
 
         #region Used State Methods
-        public void Sweep()
+        public void Sweep(MineSweeperTile _tileBase)
         {
-            m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "SweptTileState", Sweeping = true });
+            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "SweptTileState", Sweeping = true });
         }
 
-        public void Flag()
+        public void Flag(MineSweeperTile _tileBase)
         {
-            m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "FlaggedTileState", FlaggingTile = true });
+            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "FlaggedTileState", FlaggingTile = true });
         }
+
+
         #endregion Used State Methods
         #endregion Methods
     }

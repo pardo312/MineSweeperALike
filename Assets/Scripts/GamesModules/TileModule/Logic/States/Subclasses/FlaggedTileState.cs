@@ -11,12 +11,10 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Fields
         #region BackingFields
         public Sprite m_stateSpriteField;
-        public MineSweeperTile m_tileBaseField;
         #endregion BackingFields
 
         #region Properties
         public Sprite m_stateSprite => m_stateSpriteField;
-        public MineSweeperTile m_tileBase => m_tileBaseField;
         #endregion Properties
 
         #region Class Fields
@@ -28,7 +26,6 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Init
         public Sprite InitState(MineSweeperTile tileBase)
         {
-            m_tileBaseField = tileBase;
             if (m_stateSpriteField == null)
                 m_stateSpriteField = Resources.Load<Sprite>("Sprites/TileStates/Flag");
             //if(base.flags == base.mines && base.allnotminesswept)
@@ -38,14 +35,14 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Init
 
         #region Used State Methods
-        public void Flag()
+        public void Flag(MineSweeperTile _tileBase)
         {
-            m_tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState", DeFlagMine = true });
+            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState", DeFlagMine = true });
         }
         #endregion Used State Methods
 
         #region Not Used State Methods
-        public void Sweep() { }
+        public void Sweep(MineSweeperTile tileBase) { }
         #endregion Not Used State Methods
         #endregion Methods
     }

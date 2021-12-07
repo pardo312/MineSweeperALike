@@ -14,13 +14,11 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
         #region BackingFields
         public Sprite m_stateSpriteField;
-        public MineSweeperTile m_tileBaseField;
         #endregion BackingFields
 
         #region Properties
         public Sprite m_stateSprite => m_stateSpriteField;
 
-        public MineSweeperTile m_tileBase => m_tileBaseField;
         #endregion Properties
         #endregion Fields
 
@@ -28,7 +26,6 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Init
         public Sprite InitState(MineSweeperTile tileBase)
         {
-            m_tileBaseField = tileBase;
             if (tileBase.m_isMine)
             {
                 tileBase.ExplodeMine();
@@ -43,8 +40,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Init
 
         #region Not Used State Methods
-        public void Sweep() { }
-        public void Flag() { }
+        public void Sweep(MineSweeperTile tileBase) { }
+        public void Flag(MineSweeperTile tileBase) { }
         #endregion Not Used State Methods
         #endregion Methods
     }

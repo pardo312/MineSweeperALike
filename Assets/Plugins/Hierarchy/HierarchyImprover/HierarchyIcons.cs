@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [InitializeOnLoad]
 public static class HierarchyIcons
 {
@@ -20,3 +21,4 @@ public static class HierarchyIcons
 
     }
 }
+#endif 

@@ -5,10 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// Hierarchy Window Group Header
-/// http://diegogiacomelli.com.br/unitytips-changing-the-style-of-the-hierarchy-window-group-header/
-/// </summary>
+#if UNITY_EDITOR
 [InitializeOnLoad]
 public static class HierarchyGroups
 {
@@ -95,3 +92,4 @@ public class HierarchyWindowGroupHeaderSettings : ScriptableObject
         return Path.Combine(folder, "HierarchyWindowGroupHeaderSettings.asset");
     }
 }
+#endif 

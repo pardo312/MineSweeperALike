@@ -1,7 +1,9 @@
 using JiufenGames.MineSweeperAlike.Board.Logic;
 using JiufenGames.MineSweeperAlike.Gameplay.Model;
-using System.Collections;
+using JiufenModules.InterfaceReferenceValidator;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,8 +13,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
     {
         #region Fields
         [SerializeField] private BoardController m_boardController;
-        private int m_numberOfFlagsLeft;
-        private int m_flaggedMines = 0;
+        [SerializeField] private FlagsController m_flagsLeftController;
         #endregion Fields
 
         #region Methods
@@ -20,10 +21,19 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public void Start()
         {
             m_boardController.Init();
-            m_numberOfFlagsLeft = m_boardController.m_numberOfBombs;
+            m_flagsLeftController.Init(m_boardController);
 
             m_boardController.a_OnClearTileSweep -= SetUpToSweepAllClearTilesAround;
             m_boardController.a_OnClearTileSweep += SetUpToSweepAllClearTilesAround;
+
+            m_boardController.a_OnFlag -= FlagTile;
+            m_boardController.a_OnFlag += FlagTile;
+
+            InputManager.m_Instance.a_PressedInputFlag -= (tile) => ExecuteInput("Flag", tile);
+            InputManager.m_Instance.a_PressedInputFlag += (tile) => ExecuteInput("Flag", tile);
+
+            InputManager.m_Instance.a_PressedInputSweep -= (tile) => ExecuteInput("Sweep", tile);
+            InputManager.m_Instance.a_PressedInputSweep += (tile) => ExecuteInput("Sweep", tile);
 
             m_boardController.a_OnFlag -= FlagTile;
             m_boardController.a_OnFlag += FlagTile;
@@ -33,10 +43,18 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
             m_boardController.a_OnExplodeMine -= () => EndGame(false);
             m_boardController.a_OnExplodeMine += () => EndGame(false);
+
         }
         #endregion Init
 
         #region GameFlow
+        public void ExecuteInput(string _stateToChange, MineSweeperTile _tile)
+        {
+            if (!String.IsNullOrEmpty(_stateToChange))
+            {
+                _tile.ExecuteCurrentStateAction(_stateToChange, m_flagsLeftController.m_numberOfFlagsLeft > 0);
+            }
+        }
         public void ResetGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
@@ -118,27 +136,14 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
         #region Flagging
         private void DeflagTile(bool _isMine, int _row, int _column)
-
         {
-            if (_isMine)
-                m_flaggedMines--;
-
-            if (m_numberOfFlagsLeft < m_boardController.m_numberOfBombs)
-                m_numberOfFlagsLeft++;
+            m_flagsLeftController.DeflagTile(_isMine, m_boardController.m_numberOfBombs);
         }
 
         private void FlagTile(bool _isMine, int _row, int _column)
         {
-            if (_isMine)
-                m_flaggedMines++;
-
-            if (m_numberOfFlagsLeft > 0)
-                m_numberOfFlagsLeft--;
-
-            if (m_flaggedMines == m_boardController.m_numberOfBombs && m_numberOfFlagsLeft == 0)
-            {
+            if (m_flagsLeftController.FlagTile(_isMine, m_boardController.m_numberOfBombs))
                 EndGame(true);
-            }
         }
         #endregion Flagging
         #endregion Methods

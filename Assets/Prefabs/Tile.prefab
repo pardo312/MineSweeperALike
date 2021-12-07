@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 136516829091565710}
   - component: {fileID: -3147591515914313143}
+  - component: {fileID: 4705551653797170191}
   m_Layer: 5
   m_Name: Tile
   m_TagString: Untagged
@@ -51,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_tileImage: {fileID: 5055736986694851007}
+  m_tileInputManager: {fileID: 4705551653797170191}
   m_numberOfMinesTextField: {fileID: 7838907596515800105}
   m_tileStatesField:
   - {fileID: 11500000, guid: 58af1f61f17fb7443bf43e6c66c58214, type: 3}
@@ -58,6 +60,18 @@ MonoBehaviour:
   - {fileID: 11500000, guid: 254a28f27d2fec343a8e1f44c0339325, type: 3}
   m_isMine: 0
   m_numberOfMinesAround: 0
+--- !u!114 &4705551653797170191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136516829091565809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be7c02c396c8d4341934c80d0fb31b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &540146743839774245
 GameObject:
   m_ObjectHideFlags: 0

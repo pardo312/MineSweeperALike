@@ -17,8 +17,8 @@ MonoBehaviour:
       m_Calls: []
   NameStartsWith: ---
   RemoveString: '-'
-  FontStyle: 3
+  FontStyle: 1
   FontSize: 14
   Alignment: 4
   TextColor: {r: 0, g: 0, b: 0, a: 1}
-  BackgroundColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
+  BackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
-    public class MineSweeperTile : TileBase, IPointerClickHandler
+    public class MineSweeperTile : TileBase
     {
         #region ----Fields----
         #region References
@@ -32,6 +32,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public ITileState m_currentState;
         public bool m_isMine = false;
         public int m_numberOfMinesAround = 0;
+
         #endregion Class Fields
 
         #region Actions
@@ -53,12 +54,17 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState" });
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void ExecuteCurrentStateAction(string state, bool canFlag)
         {
-            if (eventData.button == PointerEventData.InputButton.Left)
-                m_currentState.Sweep();
-            else if (eventData.button == PointerEventData.InputButton.Right)
-                m_currentState.Flag();
+            if (state.CompareTo("Sweep") == 0)
+            {
+                m_currentState.Sweep(this);
+            }
+            else if (state.CompareTo("Flag") == 0)
+            {
+                if (canFlag || (!canFlag && m_currentState.m_stateName.CompareTo("FlaggedTileState") == 0))
+                    m_currentState.Flag(this);
+            }
         }
 
         /// <summary>
@@ -122,6 +128,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         {
             a_OnExplodeMine?.Invoke();
         }
+
         #endregion ----Methods----
     }
 }
