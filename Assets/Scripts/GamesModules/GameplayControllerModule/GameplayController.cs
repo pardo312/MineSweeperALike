@@ -17,7 +17,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         [SerializeField] private GameObject m_panelWin;
         [SerializeField] private BoardController m_boardController;
         [SerializeField] private FlagsController m_flagsLeftController;
-        private int m_notClearedTiles = 0;
+        [SerializeField] private int m_notClearedTiles = 0;
         #endregion Fields
 
         #region Methods
@@ -28,8 +28,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             m_flagsLeftController.Init(m_boardController);
             m_notClearedTiles = m_boardController.m_numberOfTiles;
 
-            m_boardController.a_OnNormalTileSweep -= ReduceNotClearedTiles;
-            m_boardController.a_OnNormalTileSweep += ReduceNotClearedTiles;
+            m_boardController.a_OnNormalTileSweep -= ReduceNotClearTiles;
+            m_boardController.a_OnNormalTileSweep += ReduceNotClearTiles;
 
             m_boardController.a_OnClearTileSweep -= SetUpToSweepAllClearTilesAround;
             m_boardController.a_OnClearTileSweep += SetUpToSweepAllClearTilesAround;
@@ -80,7 +80,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion GameFlow
 
         #region Sweep
-        private void ReduceNotClearedTiles()
+        private void ReduceNotClearTiles()
         {
             m_notClearedTiles--;
             //Also check flags
@@ -90,10 +90,10 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         private void SetUpToSweepAllClearTilesAround(int _row, int _column)
         {
             Dictionary<Vector2Int, bool> tilesChecked = new Dictionary<Vector2Int, bool>();
-            SweepAllClearTilesAround(_row, _column, tilesChecked);
+            SweepAllClearTilesAround(_row, _column, ref tilesChecked);
         }
 
-        private void SweepAllClearTilesAround(int _row, int _column, Dictionary<Vector2Int, bool> _tilesChecked)
+        private void SweepAllClearTilesAround(int _row, int _column, ref Dictionary<Vector2Int, bool> _tilesChecked)
         {
             for (int k = -1; k <= 1; k++)
             {
@@ -118,6 +118,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                         continue;
                     //-----</Should we verify the tile?>------
 
+                    _tilesChecked.Add(new Vector2Int(_row + k, _column + l), true);
+
                     if (currentTile.m_numberOfMinesAround != 0)
                     {
                         m_boardController.m_board[_row + k, _column + l].ChangeTileData(new MineDataPayload()
@@ -125,7 +127,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                             StateToChange = "SweptTileState",
                             Sweeping = true
                         });
-                        ReduceNotClearedTiles();
+                        ReduceNotClearTiles();
                     }
                     else
                     {
@@ -133,10 +135,9 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                         {
                             StateToChange = "SweptTileState"
                         });
-                        ReduceNotClearedTiles();
-                        SweepAllClearTilesAround(_row + k, _column + l, _tilesChecked);
+                        ReduceNotClearTiles();
+                        SweepAllClearTilesAround(_row + k, _column + l, ref _tilesChecked);
                     }
-                    _tilesChecked.Add(new Vector2Int(_row + k, _column + l), true);
                 }
             }
         }
@@ -161,7 +162,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         private void FlagTile(bool _isMine, int _row, int _column)
         {
             m_flagsLeftController.FlagTile(_isMine);
-            if (m_notClearedTiles <= 0 && m_flagsLeftController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
+            int numberOfTilesFlagged = m_boardController.m_numberOfBombs - m_flagsLeftController.m_numberOfFlagsLeft;
+            if (m_notClearedTiles - numberOfTilesFlagged == 0 && m_flagsLeftController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
                 EndGame(true);
         }
         #endregion Flagging

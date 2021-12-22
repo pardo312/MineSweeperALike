@@ -59,7 +59,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 m_board[row, column].a_OnExplodeMine += () => a_OnExplodeMine?.Invoke();
 
             });
-            m_numberOfTiles = numberOfRows * numberOfColumns;
+            m_numberOfTiles = ((numberOfRows+1) * (numberOfColumns+1))-1;
             numberOfRows += 1;
             numberOfColumns += 1;
 
