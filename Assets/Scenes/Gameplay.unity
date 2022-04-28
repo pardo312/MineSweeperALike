@@ -843,7 +843,7 @@ MonoBehaviour:
   m_tileParentField: {fileID: 1138068431}
   m_boardBackground: {fileID: 1812111845}
   m_numberOfTiles: 0
-  m_numberOfBombs: 3
+  m_numberOfBombs: 14
   m_sizeOfSquare: 1.2
 --- !u!1 &501405605
 GameObject:
