@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2839360587191122115}
   - component: {fileID: 1094653882467047188}
   - component: {fileID: 1075450141424143113}
+  - component: {fileID: 2801736959659759201}
   m_Layer: 0
   m_Name: SceneFlowManager
   m_TagString: Untagged
@@ -41,10 +42,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2839360587191122114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 148070175, guid: f8d04a132f7f75a4a91cb216b280e9dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 4994d9af071200c45985f2fd68eee17b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneFlowConfigScriptable: {fileID: 11400000, guid: cd6eecea911f60c46838a8c76489af32, type: 2}
+  loadingSceneName: Loading
 --- !u!114 &1075450141424143113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,6 +56,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b55405085d25f6d419660bd341edeaa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2801736959659759201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2839360587191122114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f859276ffa79f346aa1253bc39ec44e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2839360588595690946
@@ -98,6 +111,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2839360588595690946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 706946178, guid: 3653ee3cc5d4a2947aaacefa2eeff3e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f2c9819db1165043bde4e6d211282df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

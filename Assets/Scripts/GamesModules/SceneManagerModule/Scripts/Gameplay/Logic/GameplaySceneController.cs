@@ -1,3 +1,4 @@
+using JiufenPackages.GameManager.Logic;
 using JiufenPackages.SceneFlow.Logic;
 using Newtonsoft.Json;
 using System;
@@ -7,12 +8,14 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
 {
     public class GameplaySceneController : SceneController
     {
-        public override void Init(object _data, Action<bool> _callback = null)
+        public override void Init<T>(T _data, Action<bool> _callback = null)
         {
-            if(_data.GetType() == typeof(GameplayData))
-            {
-                Debug.Log(JsonConvert.SerializeObject(_data));
-            }
+            _callback?.Invoke(true);
+        }
+
+        public void GoBackHome()
+        {
+            GameManager.m_instance.GoTo(SceneNames.HOME);
         }
     }
 }

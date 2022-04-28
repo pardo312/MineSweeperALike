@@ -15,6 +15,7 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
             DataManager.AddListeners(DataKeys.LOAD_GAMEPLAY_DATA, LoadGameplayData);
 
         }
+
         #region Save Data
 
         private static void SaveGameplayData(object dataToSave, Action<object> callback = null)
@@ -31,7 +32,6 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
                 callback?.Invoke(new DataResponseModel(false, "Type of data incorrect", 500));
             }
         }
-
         #endregion Save Data
 
         #region Load Data

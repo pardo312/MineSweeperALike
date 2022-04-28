@@ -6,7 +6,7 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
 {
     public class GameplayInitializable : MonoBehaviour, IInitializable
     {
-        public string m_sceneName => "Gameplay";
+        public string m_sceneName => SceneNames.GAMEPLAY;
 
         public void GetData(Action<object> callback)
         {

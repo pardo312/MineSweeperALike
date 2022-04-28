@@ -1,6 +1,5 @@
 using JiufenGames.MineSweeperAlike.Board.Logic;
 using JiufenGames.MineSweeperAlike.Gameplay.Model;
-using JiufenModules.InterfaceReferenceValidator;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
