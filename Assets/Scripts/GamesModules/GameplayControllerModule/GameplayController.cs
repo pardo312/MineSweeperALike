@@ -1,8 +1,10 @@
 using JiufenGames.MineSweeperAlike.Board.Logic;
 using JiufenGames.MineSweeperAlike.Gameplay.Model;
+using JiufenPackages.ServiceLocator;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Timba.Games.SacredTails.PopupModule;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,8 +14,6 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
     public class GameplayController : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private GameObject m_panelLose;
-        [SerializeField] private GameObject m_panelWin;
         [SerializeField] private BoardController m_boardController;
         [SerializeField] private FlagsController m_flagsLeftController;
         [SerializeField] private int m_notClearedTiles = 0;
@@ -59,22 +59,18 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             if (!String.IsNullOrEmpty(_stateToChange))
                 _tile.ExecuteCurrentStateAction(_stateToChange, m_flagsLeftController.m_numberOfFlagsLeft > 0);
         }
+
         public void ResetGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
         }
+
         private void EndGame(bool won)
         {
             if (won)
-            {
-                Debug.Log("YOU WIN");
-                m_panelWin.SetActive(true);
-            }
+                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Win!");
             else
-            {
-                Debug.Log("YOU LOSE");
-                m_panelLose.SetActive(true);
-            }
+                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Lose!");
         }
         #endregion GameFlow
 

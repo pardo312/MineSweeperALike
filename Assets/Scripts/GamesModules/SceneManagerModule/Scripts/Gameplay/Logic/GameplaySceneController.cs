@@ -2,7 +2,9 @@ using JiufenPackages.GameManager.Logic;
 using JiufenPackages.SceneFlow.Logic;
 using JiufenPackages.ServiceLocator;
 using System;
+using System.Collections;
 using Timba.Games.SacredTails.PopupModule;
+using UnityEngine;
 
 namespace JiufenGames.MineSweeperAlike.SceneManagement
 {
@@ -11,7 +13,6 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
         public override void Init<T>(T _data, Action<bool> _callback = null)
         {
             _callback?.Invoke(true);
-            ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("hello!");
         }
 
         public void GoBackHome()

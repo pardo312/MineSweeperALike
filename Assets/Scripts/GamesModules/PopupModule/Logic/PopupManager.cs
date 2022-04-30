@@ -10,7 +10,8 @@ namespace Timba.Games.SacredTails.PopupModule
     public class PopupManager : MonoBehaviour, IPopupManager
     {
         #region ----Fields----
-        [SerializeField] private RectTransform infoPopup;
+        [SerializeField] private RectTransform infoPopupPanelWithBG;
+        [SerializeField] private RectTransform infoPopupContainer;
         [SerializeField] private TMP_Text infoText;
         [SerializeField] private List<Button> buttons;
 
@@ -29,7 +30,8 @@ namespace Timba.Games.SacredTails.PopupModule
 
         public void ShowInfoPopup(string textInfo, Dictionary<ButtonType, Action> buttonsActionsPair = null)
         {
-            LeanTween.scale(infoPopup, Vector2.one * 1.2f, 0.5f).setEase(LeanTweenType.easeOutBack);
+            infoPopupContainer.localScale = Vector2.one * .2f;
+            LeanTween.scale(infoPopupContainer, Vector2.one * 1f, .5f).setEase(LeanTweenType.easeOutBack);
             infoText.text = textInfo;
 
             //Set special cases
@@ -48,13 +50,16 @@ namespace Timba.Games.SacredTails.PopupModule
                 buttons[(int)buttonActionPair.Key].onClick.AddListener(() => buttonActionPair.Value?.Invoke());
             }
 
-            infoPopup.gameObject.SetActive(true);
+            infoPopupPanelWithBG.gameObject.SetActive(true);
         }
 
         public void HideInfoPopup()
         {
-            buttons.ForEach((buttons) => buttons.gameObject.SetActive(false));
-            infoPopup.gameObject.SetActive(false);
+            LeanTween.scale(infoPopupContainer, Vector2.one * .1f, .5f).setEase(LeanTweenType.easeInBack).setOnComplete(() =>
+            {
+                buttons.ForEach((buttons) => buttons.gameObject.SetActive(false));
+                infoPopupPanelWithBG.gameObject.SetActive(false);
+            });
         }
         #endregion ----Methods----
 
