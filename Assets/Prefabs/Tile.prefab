@@ -52,7 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_tileImage: {fileID: 5055736986694851007}
-  m_tileInputManager: {fileID: 4705551653797170191}
   m_numberOfMinesTextField: {fileID: 7838907596515800105}
   m_tileStatesField:
   - {fileID: 11500000, guid: 58af1f61f17fb7443bf43e6c66c58214, type: 3}
@@ -139,15 +138,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f9f9dd1e46bb06047beddc33f72a0e4d, type: 2}
+  m_sharedMaterial: {fileID: 2451989425516465239, guid: f9f9dd1e46bb06047beddc33f72a0e4d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0.426, g: 0.426, b: 0.426, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
