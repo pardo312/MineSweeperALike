@@ -13,7 +13,9 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
         [SerializeField] private RectTransform m_boardBackground;
 
         public int m_numberOfTiles = 0;
-        [SerializeField, Range(1, 40)] public int m_numberOfBombs = 10;
+        [Range(1, 40)] public int m_numberOfBombs = 10;
+        [HideInInspector] public List<MineSweeperTile> minesPositions = new List<MineSweeperTile>();
+
         [SerializeField, Range(0, 2)] private float m_sizeOfSquare = 1;
 
         public event Action a_OnNormalTileSweep;
@@ -59,7 +61,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 m_board[row, column].a_OnExplodeMine += () => a_OnExplodeMine?.Invoke();
 
             });
-            m_numberOfTiles = ((numberOfRows+1) * (numberOfColumns+1))-1;
+            m_numberOfTiles = ((numberOfRows + 1) * (numberOfColumns + 1)) - 1;
             numberOfRows += 1;
             numberOfColumns += 1;
 
@@ -90,7 +92,9 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 int randomRow = UnityEngine.Random.Range(0, numberOfRows);
                 int randomColumn = UnityEngine.Random.Range(0, numberOfColumns);
 
-                m_board[randomRow, randomColumn].m_isMine = true;
+                MineSweeperTile tile = m_board[randomRow, randomColumn];
+                tile.m_isMine = true;
+                minesPositions.Add(tile);
             }
             SetNumberBaseOnMinesAroundIt(numberOfRows, numberOfColumns);
         }
@@ -104,7 +108,6 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                     int numberOfMines = 0;
                     for (int k = -1; k <= 1; k++)
                     {
-
                         for (int l = -1; l <= 1; l++)
                         {
                             if (k == 0 && l == 0)

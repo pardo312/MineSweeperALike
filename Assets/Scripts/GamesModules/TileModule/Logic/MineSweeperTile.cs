@@ -28,6 +28,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public Dictionary<string, ITileState> m_tileStateDictionary = new Dictionary<string, ITileState>();
         public ITileState m_currentState;
         public bool m_isMine = false;
+        public bool m_isSwiping = false;
         public int m_numberOfMinesAround = 0;
 
         #endregion Class Fields
@@ -45,9 +46,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public override void Awake()
         {
             foreach (ITileState tileState in m_tileStates)
-            {
                 m_tileStateDictionary.Add(tileState.m_stateName, tileState);
-            }
+
             GetDefaultTileData();
             ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState" });
         }
@@ -55,14 +55,10 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         public void ExecuteCurrentStateAction(string state, bool canFlag)
         {
             if (state.CompareTo("Sweep") == 0)
-            {
                 m_currentState.Sweep(this);
-            }
             else if (state.CompareTo("Flag") == 0)
-            {
                 if (canFlag || (!canFlag && m_currentState.m_stateName.CompareTo("FlaggedTileState") == 0))
                     m_currentState.Flag(this);
-            }
         }
 
         /// <summary>
@@ -79,7 +75,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             {
                 MineDataPayload mineDataPayload = (MineDataPayload)_payload;
 
-                if (!String.IsNullOrEmpty(mineDataPayload.StateToChange))
+                if (!string.IsNullOrEmpty(mineDataPayload.StateToChange))
                 {
                     m_currentState = m_tileStateDictionary[mineDataPayload.StateToChange];
                     m_currentState.InitState(this);
@@ -88,34 +84,30 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
                 if (mineDataPayload.Sweeping)
                 {
-                    if (!m_isMine)
+                    if (m_isMine)
+                        return true;
+
+                    if (m_numberOfMinesAround != 0)
                     {
-                        if (m_numberOfMinesAround != 0)
-                        {
-                            m_numberOfMinesTextField.text = m_numberOfMinesAround.ToString();
-                            a_OnNormalTileSweep?.Invoke();
-                        }
-                        else
-                        {
-                            a_OnClearTileSweep?.Invoke();
-                        }
+                        m_numberOfMinesTextField.text = m_numberOfMinesAround.ToString();
+                        // Reduce the number of tiles not sweeped
+                        a_OnNormalTileSweep?.Invoke();
+                    }
+                    else
+                    {
+                        //Clear all adayacent tiles
+                        a_OnClearTileSweep?.Invoke();
                     }
                 }
                 else if (mineDataPayload.FlaggingTile)
-                {
                     a_OnFlaggedTile?.Invoke(m_isMine);
-                }
                 else if (mineDataPayload.DeFlagMine)
-                {
                     a_OnDeFlagMine?.Invoke(m_isMine);
-                }
 
                 return true;
             }
             else
-            {
                 return false;
-            }
         }
 
         public override object GetDefaultTileData()

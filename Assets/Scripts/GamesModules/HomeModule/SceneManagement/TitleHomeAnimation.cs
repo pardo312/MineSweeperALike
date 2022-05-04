@@ -1,58 +1,53 @@
-﻿using JiufenPackages.GameManager.Logic;
-using JiufenPackages.SceneFlow.Logic;
-using Newtonsoft.Json;
-using System;
+﻿using JiufenGames.MineSweeperAlike.InputModule;
+using JiufenPackages.ServiceLocator;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace JiufenGames.MineSweeperAlike.SceneManagement
+namespace JiufenGames.MineSweeperAlike.HomeModule
 {
-    public class HomeSceneController : SceneController
+    public class TitleHomeAnimation : MonoBehaviour
     {
         #region ----Fields----
         public TMP_Text titleLabel;
         public Image playButtonCover;
-        public MineSweeperALikeInputs inputs;
-        public float timeAnimation = 50;
+
+        [Range(5, 50)]
+        public float timeAnimation = 5;
         public float positionChangeY = 150;
         bool skipAnim = false;
         #endregion ----Fields----
 
         #region ----Methods----
-        public override void Init<T>(T _data, Action<bool> _callback = null)
+        public void Init()
         {
-            //Input
-            inputs = new MineSweeperALikeInputs();
-            inputs.UI.Click.performed += ctx => skipAnim = true;
-            inputs.UI.Enable();
-
-            _callback?.Invoke(true);
-            StartCoroutine(TextAppearingAnimation(positionChangeY, timeAnimation));
+            ServiceLocator.m_Instance.GetService<IInputManager>().inputs.UI.Click.performed += ctx => skipAnim = true;
+            StartCoroutine(TextAppearingAnimationCoroutine(positionChangeY, timeAnimation * 10));
         }
 
-        IEnumerator TextAppearingAnimation(float finalPositionChangeY, float timeOfAnimSeg)
+        IEnumerator TextAppearingAnimationCoroutine(float finalPositionChangeY, float timeOfAnimSeg)
         {
+            //Set title alpha in 0, and set deltas
             titleLabel.alpha = 0;
-            float deltaPosition = finalPositionChangeY / timeOfAnimSeg;
-            float deltaAlpha = 255 / timeOfAnimSeg;
+            float deltaTimer = Time.deltaTime * 100;
+            float timeOfAnim = timeOfAnimSeg;
 
+            float deltaPosition = (finalPositionChangeY * deltaTimer) / timeOfAnim;
+            float deltaAlpha = (255 * deltaTimer) / timeOfAnim;
+
+            //Set alpha of playButton cover in 1
             var tempColor = playButtonCover.color;
             tempColor.a = 1f;
-            float timeOfAnim = timeOfAnimSeg;
             playButtonCover.color = tempColor;
 
+            //Force mesh update and get text info
             titleLabel.ForceMeshUpdate();
             TMP_TextInfo textInfo = titleLabel.textInfo;
 
-            int characterCount = textInfo.characterCount;
-
-            for (int i = 0; i < characterCount; i++)
+            for (int i = 0; i < textInfo.characterCount; i++)
             {
-                int timer = 0;
-                byte alpha = 0;
+                float timer = 0;
                 while (timer < timeOfAnim)
                 {
                     TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
@@ -67,39 +62,39 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
                     for (int k = 0; k < 4; k++)
                     {
                         destinationVertices[vertexIndex + k] += new Vector3(0, deltaPosition);
-                        newVertexColors[vertexIndex + k].a = alpha;
+                        if (timer + deltaTimer > timeOfAnim)
+                            newVertexColors[vertexIndex + k].a = 255;
+                        else
+                            newVertexColors[vertexIndex + k].a += (byte)deltaAlpha;
                     }
 
                     textInfo.meshInfo[materialIndex].mesh.vertices = textInfo.meshInfo[materialIndex].vertices;
                     titleLabel.UpdateGeometry(textInfo.meshInfo[materialIndex].mesh, materialIndex);
                     titleLabel.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
-                    alpha += (byte)deltaAlpha;
-                    timer++;
+
+                    timer += deltaTimer;
                     yield return null;
                 }
 
                 if (skipAnim)
                 {
-                    timeOfAnim = 5;
-                    deltaPosition = finalPositionChangeY / timeOfAnim;
-                    deltaAlpha = 255 / timeOfAnim;
+                    timeOfAnim = 10;
+                    deltaPosition = (finalPositionChangeY * deltaTimer) / timeOfAnim;
+                    deltaAlpha = (255 * deltaTimer) / timeOfAnim;
+
                     skipAnim = false;
                 }
                 yield return new WaitForSeconds(0.05f);
             }
 
-            LeanTween.value(1, 0, (timeOfAnim / timeAnimation) * 2).setOnUpdate((float value) =>
-                 {
-                     tempColor = playButtonCover.color;
-                     tempColor.a = value;
-                     playButtonCover.color = tempColor;
-                 });
-        }
-
-        public void GoToGameplay()
-        {
-            GameManager.m_instance.GoTo(SceneNames.GAMEPLAY);
+            LeanTween.value(1, 0, (timeOfAnim / timeOfAnimSeg) * 2).setOnUpdate((float value) =>
+                  {
+                      tempColor = playButtonCover.color;
+                      tempColor.a = value;
+                      playButtonCover.color = tempColor;
+                  });
         }
         #endregion ----Methods----
     }
+
 }

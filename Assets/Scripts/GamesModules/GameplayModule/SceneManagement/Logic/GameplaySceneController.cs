@@ -1,3 +1,4 @@
+using JiufenGames.MineSweeperAlike.Gameplay.Logic;
 using JiufenPackages.GameManager.Logic;
 using JiufenPackages.SceneFlow.Logic;
 using JiufenPackages.ServiceLocator;
@@ -10,9 +11,11 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
 {
     public class GameplaySceneController : SceneController
     {
+        public GameplayController gameplaController;
         public override void Init<T>(T _data, Action<bool> _callback = null)
         {
             _callback?.Invoke(true);
+            gameplaController.Init();
         }
 
         public void GoBackHome()

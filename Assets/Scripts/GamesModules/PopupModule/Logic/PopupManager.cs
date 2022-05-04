@@ -18,7 +18,8 @@ namespace Timba.Games.SacredTails.PopupModule
         public enum ButtonType
         {
             BACK_BUTTON = 0,
-            CONFIRM_BUTTON = 1
+            CONFIRM_BUTTON = 1,
+            RESET_BUTTON = 2
         }
         #endregion ----Fields----
 

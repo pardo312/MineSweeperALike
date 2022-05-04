@@ -36,6 +36,11 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Used State Methods
         public void Sweep(MineSweeperTile _tileBase)
         {
+            float animTime = .5f;
+            LeanTween.scale(_tileBase.gameObject, Vector2.one * .2f, animTime).setEase(LeanTweenType.easeInBack).setOnComplete(() =>
+            {
+                LeanTween.scale(_tileBase.gameObject, Vector2.one, animTime).setEase(LeanTweenType.easeOutBack);
+            });
             _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "SweptTileState", Sweeping = true });
         }
 

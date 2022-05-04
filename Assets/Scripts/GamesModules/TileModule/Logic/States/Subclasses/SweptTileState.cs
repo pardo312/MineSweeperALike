@@ -40,7 +40,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Init
 
         #region Not Used State Methods
-        public void Sweep(MineSweeperTile tileBase) { }
+        public void Sweep(MineSweeperTile _tileBase) { }
         public void Flag(MineSweeperTile tileBase) { }
         #endregion Not Used State Methods
         #endregion Methods

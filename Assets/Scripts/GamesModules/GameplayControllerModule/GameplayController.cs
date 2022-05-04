@@ -2,6 +2,7 @@ using JiufenGames.MineSweeperAlike.Board.Logic;
 using JiufenGames.MineSweeperAlike.Gameplay.Model;
 using JiufenPackages.ServiceLocator;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Timba.Games.SacredTails.PopupModule;
@@ -17,21 +18,23 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         [SerializeField] private BoardController m_boardController;
         [SerializeField] private FlagsController m_flagsLeftController;
         [SerializeField] private int m_notClearedTiles = 0;
+
+        [SerializeField, Range(.01f, .1f)] private float m_sweepClearTileAnimTime = .05f;
         #endregion Fields
 
         #region Methods
         #region Init
-        public void Start()
+        public void Init()
         {
             m_boardController.Init();
             m_flagsLeftController.Init(m_boardController);
             m_notClearedTiles = m_boardController.m_numberOfTiles;
 
-            m_boardController.a_OnNormalTileSweep -= ReduceNotClearTiles;
-            m_boardController.a_OnNormalTileSweep += ReduceNotClearTiles;
+            m_boardController.a_OnNormalTileSweep -= ReduceNotSweepedTiles;
+            m_boardController.a_OnNormalTileSweep += ReduceNotSweepedTiles;
 
-            m_boardController.a_OnClearTileSweep -= SetUpToSweepAllClearTilesAround;
-            m_boardController.a_OnClearTileSweep += SetUpToSweepAllClearTilesAround;
+            m_boardController.a_OnClearTileSweep -= SweepClearTile;
+            m_boardController.a_OnClearTileSweep += SweepClearTile;
 
             m_boardController.a_OnFlag -= FlagTile;
             m_boardController.a_OnFlag += FlagTile;
@@ -65,41 +68,57 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
         }
 
+        private bool gameEnded = false;
         private void EndGame(bool won)
         {
+            if (gameEnded)
+                return;
+
+            gameEnded = true;
+
             if (won)
                 ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Win!");
             else
-                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Lose!");
+            {
+                Debug.Log("Juaja");
+                m_boardController.minesPositions.ForEach((mine) => ExecuteInput("Sweep", mine));
+                Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
+                buttonDictionary.Add(PopupManager.ButtonType.RESET_BUTTON, () =>
+                {
+                    ResetGame();
+                    ServiceLocator.m_Instance.GetService<IPopupManager>().HideInfoPopup();
+                });
+                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Lose!", buttonDictionary);
+            }
         }
         #endregion GameFlow
 
         #region Sweep
-        private void ReduceNotClearTiles()
+        private void ReduceNotSweepedTiles()
         {
             m_notClearedTiles--;
-            //Also check flags
-            if (m_notClearedTiles <= 0 && m_flagsLeftController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
+            //All tiles swept, no matter the flags
+            if (m_notClearedTiles == 0)
+            {
+                m_boardController.minesPositions.ForEach((mine) => ExecuteInput("Flag", mine));
                 EndGame(true);
-        }
-        private void SetUpToSweepAllClearTilesAround(int _row, int _column)
-        {
-            Dictionary<Vector2Int, bool> tilesChecked = new Dictionary<Vector2Int, bool>();
-            SweepAllClearTilesAround(_row, _column, ref tilesChecked);
+            }
         }
 
-        private void SweepAllClearTilesAround(int _row, int _column, ref Dictionary<Vector2Int, bool> _tilesChecked)
+        private void SweepClearTile(int _row, int _column)
+        {
+            ReduceNotSweepedTiles();
+            StartCoroutine(SweepAllClearTilesAround(_row, _column));
+        }
+
+        private IEnumerator SweepAllClearTilesAround(int _row, int _column)
         {
             for (int k = -1; k <= 1; k++)
             {
                 for (int l = -1; l <= 1; l++)
                 {
-                    //-----<Should we verify the tile?>------
                     //if tile = tileChecking(originaltile)
                     if (k == 0 && l == 0)
-                        continue;
-                    //if tile alreadyChecked
-                    if (_tilesChecked.ContainsKey(new Vector2Int(_row + k, _column + l)))
                         continue;
                     //if tile outsideBounds
                     if (!CheckIfInsideBoundsOfBoard(_row + k, _column + l))
@@ -111,30 +130,19 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                     //if tile isn't in normalState
                     if (currentTile.m_currentState.m_stateName.CompareTo("NormalTileState") != 0)
                         continue;
-                    //-----</Should we verify the tile?>------
+                    if (currentTile.m_isSwiping)
+                        continue;
 
-                    _tilesChecked.Add(new Vector2Int(_row + k, _column + l), true);
+                    currentTile.m_isSwiping = true;
 
-                    if (currentTile.m_numberOfMinesAround != 0)
-                    {
-                        m_boardController.m_board[_row + k, _column + l].ChangeTileData(new MineDataPayload()
-                        {
-                            StateToChange = "SweptTileState",
-                            Sweeping = true
-                        });
-                        ReduceNotClearTiles();
-                    }
-                    else
-                    {
-                        m_boardController.m_board[_row + k, _column + l].ChangeTileData(new MineDataPayload()
-                        {
-                            StateToChange = "SweptTileState"
-                        });
-                        ReduceNotClearTiles();
-                        SweepAllClearTilesAround(_row + k, _column + l, ref _tilesChecked);
-                    }
+                    //Sweep tile and reduce the not sweeped tiles
+                    yield return new WaitForSeconds(m_sweepClearTileAnimTime);
+                    currentTile.ExecuteCurrentStateAction("Sweep", m_flagsLeftController.m_numberOfFlagsLeft > 0);
+
+                    currentTile.m_isSwiping = false;
                 }
             }
+            yield return null;
         }
 
         private bool CheckIfInsideBoundsOfBoard(int row, int column)
@@ -157,8 +165,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         private void FlagTile(bool _isMine, int _row, int _column)
         {
             m_flagsLeftController.FlagTile(_isMine);
-            int numberOfTilesFlagged = m_boardController.m_numberOfBombs - m_flagsLeftController.m_numberOfFlagsLeft;
-            if (m_notClearedTiles - numberOfTilesFlagged == 0 && m_flagsLeftController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
+            if (m_notClearedTiles == 0 && m_flagsLeftController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
                 EndGame(true);
         }
         #endregion Flagging

@@ -58,9 +58,9 @@ namespace JiufenPackages.ServiceLocator
                         foundService = go.GetComponentInChildren<T>();
                         services.Add(typeof(T), foundService);
                     }
-                    else
-                        Debug.LogError($"Service {typeof(T).Name} not found in ServiceLocator");
                 });
+                if (EqualityComparer<T>.Default.Equals(foundService, default(T)))
+                    Debug.LogError($"Service {typeof(T).Name} not found in ServiceLocator");
             }
             return foundService;
         }
