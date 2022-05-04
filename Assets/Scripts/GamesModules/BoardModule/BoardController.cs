@@ -42,6 +42,8 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             int numberOfColumns = 0;
             base.CreateBoard(_payload, (row, column) =>
             {
+                m_board[row, column].transform.localScale = Vector2.one * .1f;
+                LeanTween.scale(m_board[row, column].gameObject, Vector2.one * 1f, .5f).setEase(LeanTweenType.easeInBack);
                 numberOfRows = row;
                 numberOfColumns = column;
 
