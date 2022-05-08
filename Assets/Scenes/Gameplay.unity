@@ -557,9 +557,10 @@ MonoBehaviour:
   m_tileParentField: {fileID: 1138068431}
   m_boardBackground: {fileID: 1812111845}
   m_numberOfTiles: 0
-  m_numberOfBombs: 12
+  m_numberOfBombs: 14
   minesPositions: []
-  m_sizeOfSquare: 1.4
+  m_numberOfRows: 11
+  m_numberOfColumns: 11
 --- !u!1 &501405605
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,8 +867,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.10986328, y: 0.00012207031}
-  m_SizeDelta: {x: -54.326, y: -76.8253}
+  m_AnchoredPosition: {x: -1.3898926, y: 0.00012207031}
+  m_SizeDelta: {x: -51.325928, y: -76.8253}
   m_Pivot: {x: 0.50000006, y: 0.49999997}
 --- !u!222 &1138068433
 CanvasRenderer:
@@ -1047,6 +1048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_boardController: {fileID: 476375578}
   m_flagsLeftController: {fileID: 1053780069}
+  m_cameraZoomController: {fileID: 1647675547}
   m_notClearedTiles: 0
   m_sweepClearTileAnimTime: 0.05
 --- !u!4 &1411407197
@@ -1365,6 +1367,7 @@ GameObject:
   - component: {fileID: 1647675544}
   - component: {fileID: 1647675545}
   - component: {fileID: 1647675546}
+  - component: {fileID: 1647675547}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -1425,9 +1428,21 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 519420031}
+--- !u!114 &1647675547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647675543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a567c642825a74d4881a72f5d2c0658c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1812111844
 GameObject:
   m_ObjectHideFlags: 0

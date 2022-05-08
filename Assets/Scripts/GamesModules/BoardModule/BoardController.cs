@@ -4,11 +4,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace JiufenGames.MineSweeperAlike.Board.Logic
 {
-    public class BoardController : BoardControllerSquaredTilesBase<MineSweeperTile>
+    public class BoardController : BoardControllerFullContainerBase<MineSweeperTile>
     {
         [SerializeField] private RectTransform m_boardBackground;
 
@@ -16,8 +15,8 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
         [Range(1, 40)] public int m_numberOfBombs = 10;
         [HideInInspector] public List<MineSweeperTile> minesPositions = new List<MineSweeperTile>();
 
-        [SerializeField, Range(0, 2)] private float m_sizeOfSquare = 1;
-
+        public int m_numberOfRows = 1;
+        public int m_numberOfColumns = 1;
         public event Action a_OnNormalTileSweep;
         public event Action<int, int> a_OnClearTileSweep;
 
@@ -28,77 +27,99 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
         public event Action<bool, int, int> a_OnDeFlag;
 
         public event Action a_OnExplodeMine;
+        public event Action a_OnBoardCreated;
+
 
         public event Action<string, MineSweeperTile, Action<Sprite>> a_OnChangeState;
         public override void Init()
         {
-            CreateBoard(new SquareTilesBoardPayload() { _squareSize = m_sizeOfSquare });
+            m_numberOfBombs = PlayerPrefs.GetInt("numBombs", m_numberOfBombs);
+            m_numberOfRows = PlayerPrefs.GetInt("numRows", m_numberOfRows);
+            m_numberOfColumns = PlayerPrefs.GetInt("numColumns", m_numberOfColumns);
+
+            CreateBoard(new BaseBoardPayload() { _rows = m_numberOfRows, _columns = m_numberOfColumns, _squaredTiles = true }, callback: (data) => a_OnBoardCreated?.Invoke());
         }
 
         public override void CreateBoard(object _payload, Action<int, int> _createdTile = null, Action<object> callback = null)
         {
             //----Create Board----
-            int numberOfRows = 0;
-            int numberOfColumns = 0;
-            base.CreateBoard(_payload, (row, column) =>
+            base.CreateBoard(_payload, OnTileCreated, (data) =>
             {
-                m_board[row, column].transform.localScale = Vector2.one * .1f;
-                LeanTween.scale(m_board[row, column].gameObject, Vector2.one * 1f, .5f).setEase(LeanTweenType.easeOutBack);
-                numberOfRows = row;
-                numberOfColumns = column;
-
-                m_board[row, column].a_OnNormalTileSweep -= () => a_OnNormalTileSweep?.Invoke();
-                m_board[row, column].a_OnNormalTileSweep += () => a_OnNormalTileSweep?.Invoke();
-
-                m_board[row, column].a_OnClearTileSweep -= () => a_OnClearTileSweep?.Invoke(row, column);
-                m_board[row, column].a_OnClearTileSweep += () => a_OnClearTileSweep?.Invoke(row, column);
-
-                m_board[row, column].a_OnFlaggedTile -= (isMine) => a_OnFlag?.Invoke(isMine, row, column);
-                m_board[row, column].a_OnFlaggedTile += (isMine) => a_OnFlag?.Invoke(isMine, row, column);
-
-                m_board[row, column].a_OnDeFlagMine -= (isMine) => a_OnDeFlag?.Invoke(isMine, row, column);
-                m_board[row, column].a_OnDeFlagMine += (isMine) => a_OnDeFlag?.Invoke(isMine, row, column);
-
-                m_board[row, column].a_OnExplodeMine -= () => a_OnExplodeMine?.Invoke();
-                m_board[row, column].a_OnExplodeMine += () => a_OnExplodeMine?.Invoke();
-
+                m_numberOfTiles = (m_numberOfRows * m_numberOfColumns);
+                OnBoardCreated(data);
+                StartCoroutine(WaitForSeconds(.5f , () =>
+                    {
+                        callback?.Invoke(data);
+                    }));
             });
-            m_numberOfTiles = ((numberOfRows + 1) * (numberOfColumns + 1)) - 1;
-            numberOfRows += 1;
-            numberOfColumns += 1;
+
+        }
+        public void OnTileCreated(int row, int column)
+        {
+            m_board[row, column].transform.localScale = Vector2.one * .1f;
+            LeanTween.scale(m_board[row, column].gameObject, Vector2.one * 1f, .5f).setEase(LeanTweenType.easeOutBack);
+
+            m_board[row, column].a_OnNormalTileSweep -= () => a_OnNormalTileSweep?.Invoke();
+            m_board[row, column].a_OnNormalTileSweep += () => a_OnNormalTileSweep?.Invoke();
+
+            m_board[row, column].a_OnClearTileSweep -= () => a_OnClearTileSweep?.Invoke(row, column);
+            m_board[row, column].a_OnClearTileSweep += () => a_OnClearTileSweep?.Invoke(row, column);
+
+            m_board[row, column].a_OnFlaggedTile -= (isMine) => a_OnFlag?.Invoke(isMine, row, column);
+            m_board[row, column].a_OnFlaggedTile += (isMine) => a_OnFlag?.Invoke(isMine, row, column);
+
+            m_board[row, column].a_OnDeFlagMine -= (isMine) => a_OnDeFlag?.Invoke(isMine, row, column);
+            m_board[row, column].a_OnDeFlagMine += (isMine) => a_OnDeFlag?.Invoke(isMine, row, column);
+
+            m_board[row, column].a_OnExplodeMine -= () => a_OnExplodeMine?.Invoke();
+            m_board[row, column].a_OnExplodeMine += () => a_OnExplodeMine?.Invoke();
+
+        }
+        public void OnBoardCreated(object data)
+        {
+            BaseBoardDto boardDto;
+            if (data.GetType() != typeof(BaseBoardDto))
+                return;
+            boardDto = (BaseBoardDto)data;
 
             //----Set Background----
             RectTransform parentRectTransform = m_tileParent.GetComponent<RectTransform>();
             m_boardBackground.anchoredPosition = parentRectTransform.rect.center;
-            float widthBackground = numberOfColumns * m_sizeOfSquare * 100;
-            float heightBackground = numberOfRows * m_sizeOfSquare * 100;
 
-            float offsetWidth = 0;
-            float offsetHeight = 0;
+            float widthBackground = (m_numberOfColumns * boardDto._sizeOfTiles.x);
+            float heightBackground = (m_numberOfRows * boardDto._sizeOfTiles.y);
 
-            if (widthBackground > parentRectTransform.rect.width)
-            {
-                offsetHeight = widthBackground - parentRectTransform.rect.width;
-                widthBackground = parentRectTransform.rect.width;
-            }
-            if (heightBackground > parentRectTransform.rect.height)
-            {
-                offsetWidth = heightBackground - parentRectTransform.rect.height;
-                heightBackground = parentRectTransform.rect.height;
-            }
-            m_boardBackground.sizeDelta = new Vector2(widthBackground - offsetWidth, heightBackground - offsetHeight);
+            m_boardBackground.sizeDelta = new Vector2(widthBackground, heightBackground);
 
+            List<Vector2> boardList = new List<Vector2>();
+            for (int i = 0; i < m_board.GetLength(0); i++)
+                for (int j = 0; j < m_board.GetLength(1); j++)
+                    boardList.Add(new Vector2(i, j));
+
+            int boardListSize = boardList.Count;
             //-----Create Mines----
             for (int i = 0; i < m_numberOfBombs; i++)
             {
-                int randomRow = UnityEngine.Random.Range(0, numberOfRows);
-                int randomColumn = UnityEngine.Random.Range(0, numberOfColumns);
+                int randomRowColumnIndex = UnityEngine.Random.Range(0, boardListSize);
+                Vector2 randomRowColumn = boardList[randomRowColumnIndex];
+
+                int randomRow = (int)randomRowColumn.x;
+                int randomColumn = (int)randomRowColumn.y;
 
                 MineSweeperTile tile = m_board[randomRow, randomColumn];
                 tile.m_isMine = true;
                 minesPositions.Add(tile);
+
+                boardList.RemoveAt(randomRowColumnIndex);
+                boardListSize--;
             }
-            SetNumberBaseOnMinesAroundIt(numberOfRows, numberOfColumns);
+            SetNumberBaseOnMinesAroundIt(m_numberOfRows, m_numberOfColumns);
+        }
+
+        IEnumerator WaitForSeconds(float seconds, Action callback)
+        {
+            yield return new WaitForSeconds(seconds);
+            callback?.Invoke();
         }
 
         private void SetNumberBaseOnMinesAroundIt(int rows, int columns)

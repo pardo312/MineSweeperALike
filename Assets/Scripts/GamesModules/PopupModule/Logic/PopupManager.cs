@@ -56,9 +56,9 @@ namespace Timba.Games.SacredTails.PopupModule
 
         public void HideInfoPopup()
         {
+            buttons.ForEach((buttons) => buttons.gameObject.SetActive(false));
             LeanTween.scale(infoPopupContainer, Vector2.one * .1f, .5f).setEase(LeanTweenType.easeInBack).setOnComplete(() =>
             {
-                buttons.ForEach((buttons) => buttons.gameObject.SetActive(false));
                 infoPopupPanelWithBG.gameObject.SetActive(false);
             });
         }

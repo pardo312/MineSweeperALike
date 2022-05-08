@@ -1,14 +1,11 @@
 using JiufenGames.MineSweeperAlike.Board.Logic;
-using JiufenGames.MineSweeperAlike.Gameplay.Model;
 using JiufenPackages.ServiceLocator;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using Timba.Games.SacredTails.PopupModule;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
@@ -17,55 +14,69 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Fields
         [SerializeField] private BoardController m_boardController;
         [SerializeField] private FlagsController m_flagsLeftController;
+        [SerializeField] private CameraZoomController m_cameraZoomController;
         [SerializeField] private int m_notClearedTiles = 0;
 
         [SerializeField, Range(.01f, .1f)] private float m_sweepClearTileAnimTime = .05f;
+        private bool isReady = false;
         #endregion Fields
 
         #region Methods
         #region Init
         public void Init()
         {
+            LeanTween.init(2300);
+            m_boardController.a_OnBoardCreated += () =>
+            {
+                m_flagsLeftController.Init(m_boardController);
+                m_notClearedTiles = m_boardController.m_numberOfTiles - m_boardController.m_numberOfBombs;
+
+                m_boardController.a_OnNormalTileSweep -= ReduceNotSweepedTiles;
+                m_boardController.a_OnNormalTileSweep += ReduceNotSweepedTiles;
+
+                m_boardController.a_OnClearTileSweep -= SweepClearTile;
+                m_boardController.a_OnClearTileSweep += SweepClearTile;
+
+                m_boardController.a_OnFlag -= FlagTile;
+                m_boardController.a_OnFlag += FlagTile;
+
+                InputManager.m_Instance.a_PressedInputFlag -= (tile) => ExecuteInput("Flag", tile);
+                InputManager.m_Instance.a_PressedInputFlag += (tile) => ExecuteInput("Flag", tile);
+
+                InputManager.m_Instance.a_PressedInputSweep -= (tile) => ExecuteInput("Sweep", tile);
+                InputManager.m_Instance.a_PressedInputSweep += (tile) => ExecuteInput("Sweep", tile);
+
+                m_boardController.a_OnFlag -= FlagTile;
+                m_boardController.a_OnFlag += FlagTile;
+
+                m_boardController.a_OnDeFlag -= DeflagTile;
+                m_boardController.a_OnDeFlag += DeflagTile;
+
+                m_boardController.a_OnExplodeMine -= () => EndGame(false);
+                m_boardController.a_OnExplodeMine += () => EndGame(false);
+
+                m_cameraZoomController.Init(m_boardController.m_tileParent.GetComponent<RectTransform>());
+                isReady = true;
+            };
             m_boardController.Init();
-            m_flagsLeftController.Init(m_boardController);
-            m_notClearedTiles = m_boardController.m_numberOfTiles;
-
-            m_boardController.a_OnNormalTileSweep -= ReduceNotSweepedTiles;
-            m_boardController.a_OnNormalTileSweep += ReduceNotSweepedTiles;
-
-            m_boardController.a_OnClearTileSweep -= SweepClearTile;
-            m_boardController.a_OnClearTileSweep += SweepClearTile;
-
-            m_boardController.a_OnFlag -= FlagTile;
-            m_boardController.a_OnFlag += FlagTile;
-
-            InputManager.m_Instance.a_PressedInputFlag -= (tile) => ExecuteInput("Flag", tile);
-            InputManager.m_Instance.a_PressedInputFlag += (tile) => ExecuteInput("Flag", tile);
-
-            InputManager.m_Instance.a_PressedInputSweep -= (tile) => ExecuteInput("Sweep", tile);
-            InputManager.m_Instance.a_PressedInputSweep += (tile) => ExecuteInput("Sweep", tile);
-
-            m_boardController.a_OnFlag -= FlagTile;
-            m_boardController.a_OnFlag += FlagTile;
-
-            m_boardController.a_OnDeFlag -= DeflagTile;
-            m_boardController.a_OnDeFlag += DeflagTile;
-
-            m_boardController.a_OnExplodeMine -= () => EndGame(false);
-            m_boardController.a_OnExplodeMine += () => EndGame(false);
         }
         #endregion Init
 
         #region GameFlow
         public void ExecuteInput(string _stateToChange, MineSweeperTile _tile)
         {
-            if (!String.IsNullOrEmpty(_stateToChange))
-                _tile.ExecuteCurrentStateAction(_stateToChange, m_flagsLeftController.m_numberOfFlagsLeft > 0);
+            if (m_cameraZoomController.isZooming)
+                return;
+            if (String.IsNullOrEmpty(_stateToChange))
+                return;
+
+            _tile.ExecuteCurrentStateAction(_stateToChange, m_flagsLeftController.m_numberOfFlagsLeft > 0);
         }
 
         public void ResetGame()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
+            if (isReady && m_boardController.m_numberOfTiles != m_notClearedTiles)
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
         }
 
         private bool gameEnded = false;
@@ -73,21 +84,22 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         {
             if (gameEnded)
                 return;
-
             gameEnded = true;
 
+            // Add reset button to popup
+            Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
+            buttonDictionary.Add(PopupManager.ButtonType.RESET_BUTTON, () =>
+            {
+                ServiceLocator.m_Instance.GetService<IPopupManager>().HideInfoPopup();
+                ResetGame();
+            });
+
+            //Set result text.
             if (won)
-                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Win!");
+                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Win!", buttonDictionary);
             else
             {
-                Debug.Log("Juaja");
                 m_boardController.minesPositions.ForEach((mine) => ExecuteInput("Sweep", mine));
-                Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
-                buttonDictionary.Add(PopupManager.ButtonType.RESET_BUTTON, () =>
-                {
-                    ResetGame();
-                    ServiceLocator.m_Instance.GetService<IPopupManager>().HideInfoPopup();
-                });
                 ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("You Lose!", buttonDictionary);
             }
         }
@@ -100,7 +112,11 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             //All tiles swept, no matter the flags
             if (m_notClearedTiles == 0)
             {
-                m_boardController.minesPositions.ForEach((mine) => ExecuteInput("Flag", mine));
+                m_boardController.minesPositions.ForEach((mine) =>
+                {
+                    if (mine.m_currentState.m_stateName.CompareTo("FlaggedTileState") != 0)
+                        ExecuteInput("Flag", mine);
+                });
                 EndGame(true);
             }
         }

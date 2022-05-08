@@ -23,14 +23,14 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         public void Init()
         {
             ServiceLocator.m_Instance.GetService<IInputManager>().inputs.UI.Click.performed += ctx => skipAnim = true;
-            StartCoroutine(TextAppearingAnimationCoroutine(positionChangeY, timeAnimation * 10));
+            StartCoroutine(TextAppearingAnimationCoroutine(positionChangeY, timeAnimation ));
         }
 
         IEnumerator TextAppearingAnimationCoroutine(float finalPositionChangeY, float timeOfAnimSeg)
         {
             //Set title alpha in 0, and set deltas
             titleLabel.alpha = 0;
-            float deltaTimer = Time.deltaTime * 100;
+            float deltaTimer = 1;
             float timeOfAnim = timeOfAnimSeg;
 
             float deltaPosition = (finalPositionChangeY * deltaTimer) / timeOfAnim;
@@ -78,7 +78,7 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
 
                 if (skipAnim)
                 {
-                    timeOfAnim = 10;
+                    timeOfAnim = 5;
                     deltaPosition = (finalPositionChangeY * deltaTimer) / timeOfAnim;
                     deltaAlpha = (255 * deltaTimer) / timeOfAnim;
 
@@ -87,12 +87,14 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
                 yield return new WaitForSeconds(0.05f);
             }
 
-            LeanTween.value(1, 0, (timeOfAnim / timeOfAnimSeg) * 2).setOnUpdate((float value) =>
+            LeanTween.value(1, 0, (timeOfAnim / timeOfAnimSeg) * 2)
+                .setOnUpdate((float value) =>
                   {
                       tempColor = playButtonCover.color;
                       tempColor.a = value;
                       playButtonCover.color = tempColor;
-                  });
+                  })
+                .setOnComplete(()=> playButtonCover.gameObject.SetActive(false) );
         }
         #endregion ----Methods----
     }
