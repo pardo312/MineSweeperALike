@@ -90,6 +90,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             float heightBackground = (m_numberOfRows * boardDto._sizeOfTiles.y);
 
             m_boardBackground.sizeDelta = new Vector2(widthBackground, heightBackground);
+            parentRectTransform.sizeDelta = new Vector2(widthBackground, heightBackground);
 
             List<Vector2> boardList = new List<Vector2>();
             for (int i = 0; i < m_board.GetLength(0); i++)

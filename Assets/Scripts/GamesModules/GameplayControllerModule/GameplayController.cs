@@ -67,6 +67,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         {
             if (m_cameraZoomController.isZooming)
                 return;
+            if (m_cameraZoomController.isMoving)
+                return;
             if (String.IsNullOrEmpty(_stateToChange))
                 return;
 

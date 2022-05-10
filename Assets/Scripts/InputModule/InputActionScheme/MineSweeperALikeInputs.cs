@@ -296,7 +296,7 @@ public class @MineSweeperALikeInputs : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Click"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""053a8754-6855-4d8a-a0a7-a19e0cd7a144"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -679,7 +679,7 @@ public class @MineSweeperALikeInputs : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""47c2a644-3ebc-4dae-a106-589b7ca75b59"",
-                    ""path"": ""<Touchscreen>/press"",
+                    ""path"": ""<Touchscreen>/touch0/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Touch"",
