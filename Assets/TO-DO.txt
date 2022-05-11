@@ -1,0 +1,14 @@
+---------ToDo-------------
+
+//--------Zoom and moving-----------
+- Limit scale
+
+//-------Implement music and sfx---------
+- Sfx buttons
+- sfx mine explode
+- sfx victory
+- Sfx popup
+- sfx sweepTile
+- Sfx reboot
+- OST main menu
+- OST gameplay

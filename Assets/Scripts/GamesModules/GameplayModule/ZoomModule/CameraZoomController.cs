@@ -23,17 +23,13 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         private Vector2 prevPrimaryTouch = Vector2.zero, initSecondaryTouch = Vector2.zero;
         private float previousDistance = 0f;
 
-        private Vector2 initBoardPosition;
-        private Vector2 boardSize;
+        [SerializeField, Range(.1f, 5f)] private float movementSpeed = 1f;
         #endregion ----Fields----
 
         #region ----Methods----
         public void Init(RectTransform _boardTransform)
         {
             boardTransform = _boardTransform;
-            initBoardPosition = boardTransform.anchoredPosition;
-            Vector2 tempSize = boardTransform.GetChild(0).GetComponent<RectTransform>().rect.size;
-            boardSize = new Vector2(tempSize.x * .0625f, tempSize.y * .125f);
             inputs = ServiceLocator.m_Instance.GetService<IInputManager>().inputs;
 
             inputs.UI.SecondaryTouchContact.started += TwoFingersTouchStart;
@@ -67,23 +63,25 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 Vector2 primaryTouch = inputs.UI.PrimaryTouch.ReadValue<Vector2>();
                 float distance = Vector2.Distance(primaryTouch, prevPrimaryTouch);
 
-                Vector2 differenceInitCurrentAnchor = (boardTransform.anchoredPosition + ((primaryTouch - prevPrimaryTouch))) - initBoardPosition;
-
                 if (distance > 3 && distance < 100)
                 {
-                    Debug.Log("Hello" + distance);
-                    if (differenceInitCurrentAnchor.x > -boardSize.x && differenceInitCurrentAnchor.x < boardSize.x)
-                    {
-                        boardTransform.anchoredPosition += new Vector2((primaryTouch - prevPrimaryTouch).x, 0);
-                        boardTransform.pivot -= new Vector2((primaryTouch - prevPrimaryTouch).x, 0) * (.5f / boardSize.x);
-                        isMoving = true;
-                    }
-                    if (differenceInitCurrentAnchor.y > -boardSize.y && differenceInitCurrentAnchor.y < boardSize.y)
-                    {
-                        boardTransform.anchoredPosition += new Vector2(0, (primaryTouch - prevPrimaryTouch).y);
-                        boardTransform.pivot -= new Vector2(0, (primaryTouch - prevPrimaryTouch).y) * (.5f / boardSize.y);
-                        isMoving = true;
-                    }
+                    float addPivotX = (primaryTouch - prevPrimaryTouch).x * (.0005f * movementSpeed * (1 / boardTransform.localScale.x));
+                    if (boardTransform.pivot.x - addPivotX < 0)
+                        boardTransform.pivot = new Vector2(0, boardTransform.pivot.y);
+                    else if (boardTransform.pivot.x - addPivotX > 1)
+                        boardTransform.pivot = new Vector2(1, boardTransform.pivot.y);
+                    else
+                        boardTransform.pivot -= new Vector2(addPivotX, 0);
+
+                    float addPivotY = (primaryTouch - prevPrimaryTouch).y * (.0005f * movementSpeed * (1 / boardTransform.localScale.y));
+                    if (boardTransform.pivot.y - addPivotY < 0)
+                        boardTransform.pivot = new Vector2(boardTransform.pivot.x, 0);
+                    else if (boardTransform.pivot.y - addPivotY > 1)
+                        boardTransform.pivot = new Vector2(boardTransform.pivot.x, 1);
+                    else
+                        boardTransform.pivot -= new Vector2(0, addPivotY);
+
+                    isMoving = true;
                 }
 
                 prevPrimaryTouch = primaryTouch;
@@ -119,10 +117,17 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 {
                     float distance = Vector2.Distance(inputs.UI.PrimaryTouch.ReadValue<Vector2>(), inputs.UI.SecondaryTouch.ReadValue<Vector2>());
                     float distanceFactor = distance / previousDistance;
-                    if ((distanceFactor > 1.0002f || distanceFactor < .9992f) && boardTransform.localScale.magnitude > 0.01f)
+                    if (distanceFactor > 1.0002f || distanceFactor < .9998f)
                     {
-                        boardTransform.localScale *= distanceFactor;
-                        isZooming = true;
+                        if (boardTransform.localScale.x * distanceFactor < 1)
+                            boardTransform.localScale = Vector2.one;
+                        else if (boardTransform.localScale.x * distanceFactor > 4)
+                            boardTransform.localScale = Vector2.one * 4;
+                        else
+                        {
+                            boardTransform.localScale *= distanceFactor;
+                            isZooming = true;
+                        }
                     }
 
                 }

@@ -57,7 +57,7 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
                     break;
             }
 
-            numberOfBombs = (int)(rows * columns * 6.4f);
+            numberOfBombs = (int)((rows * columns )/ 6.4f);
             SetCustomDifficultyValues(rows, columns, numberOfBombs);
         }
 
