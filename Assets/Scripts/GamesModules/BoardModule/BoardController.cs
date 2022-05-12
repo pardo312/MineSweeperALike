@@ -63,6 +63,8 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
         }
         public void OnTileCreated(int row, int column)
         {
+            m_board[row, column].m_tileColumn = column;
+            m_board[row, column].m_tileRow = row;
             m_board[row, column].transform.localScale = Vector2.one * .1f;
             LeanTween.scale(m_board[row, column].gameObject, Vector2.one * 1f, .5f).setEase(LeanTweenType.easeOutBack);
 
@@ -124,6 +126,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             SetNumberBaseOnMinesAroundIt(m_numberOfRows, m_numberOfColumns);
         }
 
+        [ContextMenu("Do it!")]
         public void SaveMatch()
         {
             List<Vector2Int> minesPos = new List<Vector2Int>();
@@ -136,9 +139,9 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             {
                 for (int j = 0; j < m_board.GetLength(1); j++)
                 {
-                    if (m_board[i, j].m_currentState.Equals(TileStatesConstants.FLAGGED_TILE_STATE))
+                    if (m_board[i, j].m_currentState.m_stateName.Equals(TileStatesConstants.FLAGGED_TILE_STATE))
                         sweepPos.Add(new Vector2Int(i, j));
-                    else if (m_board[i, j].m_currentState.Equals(TileStatesConstants.SWEPT_TILE_STATE))
+                    else if (m_board[i, j].m_currentState.m_stateName.Equals(TileStatesConstants.SWEPT_TILE_STATE))
                         flaggedPos.Add(new Vector2Int(i, j));
                 }
             }
@@ -149,6 +152,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 minesPositions = minesPos,
                 sweepedTilePositions = sweepPos
             };
+            Debug.Log(JsonUtility.ToJson(boardData));
         }
 
         public void LoadMatch(BoardData boardData)
