@@ -49,15 +49,15 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 m_tileStateDictionary.Add(tileState.m_stateName, tileState);
 
             GetDefaultTileData();
-            ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState" });
+            ChangeTileData(new MineDataPayload() { StateToChange = TileStatesConstants.NORMAL_TILE_STATE });
         }
 
         public void ExecuteCurrentStateAction(string state, bool canFlag)
         {
-            if (state.CompareTo("Sweep") == 0)
+            if (state.CompareTo(TileStatesConstants.SWEEP_ACTION) == 0)
                 m_currentState.Sweep(this);
-            else if (state.CompareTo("Flag") == 0)
-                if (canFlag || (!canFlag && m_currentState.m_stateName.CompareTo("FlaggedTileState") == 0))
+            else if (state.CompareTo(TileStatesConstants.FLAG_ACTION) == 0)
+                if (canFlag || (!canFlag && m_currentState.m_stateName.CompareTo(TileStatesConstants.FLAGGED_TILE_STATE) == 0))
                     m_currentState.Flag(this);
         }
 

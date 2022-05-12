@@ -1,8 +1,5 @@
 ---------ToDo-------------
 
-//--------Zoom and moving-----------
-- Limit scale
-
 //-------Implement music and sfx---------
 - Sfx buttons
 - sfx mine explode

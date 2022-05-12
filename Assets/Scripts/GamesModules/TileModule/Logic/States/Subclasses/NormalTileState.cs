@@ -9,7 +9,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
     {
         #region Fields
         #region Class Fields
-        public string m_stateName => "NormalTileState";
+        public string m_stateName => TileStatesConstants.NORMAL_TILE_STATE;
         public bool m_canFlag = false;
         public bool m_canSweep = false;
         #endregion Class Fields
@@ -41,12 +41,12 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             {
                 LeanTween.scale(_tileBase.gameObject, Vector2.one, animTime).setEase(LeanTweenType.easeOutBack);
             });
-            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "SweptTileState", Sweeping = true });
+            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = TileStatesConstants.SWEPT_TILE_STATE, Sweeping = true });
         }
 
         public void Flag(MineSweeperTile _tileBase)
         {
-            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "FlaggedTileState", FlaggingTile = true });
+            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = TileStatesConstants.FLAGGED_TILE_STATE, FlaggingTile = true });
         }
 
 

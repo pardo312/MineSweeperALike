@@ -9,7 +9,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
     {
         #region Fields
         #region Class Fields
-        public string m_stateName => "SweptTileState";
+        public string m_stateName => TileStatesConstants.SWEPT_TILE_STATE;
         #endregion Class Fields
 
         #region BackingFields

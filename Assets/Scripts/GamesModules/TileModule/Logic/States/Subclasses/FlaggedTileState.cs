@@ -18,7 +18,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #endregion Properties
 
         #region Class Fields
-        public string m_stateName => "FlaggedTileState";
+        public string m_stateName => TileStatesConstants.FLAGGED_TILE_STATE;
         #endregion Class Fields
         #endregion Fields
 
@@ -37,7 +37,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         #region Used State Methods
         public void Flag(MineSweeperTile _tileBase)
         {
-            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = "NormalTileState", DeFlagMine = true });
+            _tileBase.ChangeTileData(new MineDataPayload() { StateToChange = TileStatesConstants.NORMAL_TILE_STATE, DeFlagMine = true });
         }
         #endregion Used State Methods
 

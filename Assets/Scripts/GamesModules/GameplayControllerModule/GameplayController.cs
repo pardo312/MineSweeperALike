@@ -40,11 +40,11 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 m_boardController.a_OnFlag -= FlagTile;
                 m_boardController.a_OnFlag += FlagTile;
 
-                InputManager.m_Instance.a_PressedInputFlag -= (tile) => ExecuteInput("Flag", tile);
-                InputManager.m_Instance.a_PressedInputFlag += (tile) => ExecuteInput("Flag", tile);
+                InputManager.m_Instance.a_PressedInputFlag -= (tile) => ExecuteInput(TileStatesConstants.FLAG_ACTION, tile);
+                InputManager.m_Instance.a_PressedInputFlag += (tile) => ExecuteInput(TileStatesConstants.FLAG_ACTION, tile);
 
-                InputManager.m_Instance.a_PressedInputSweep -= (tile) => ExecuteInput("Sweep", tile);
-                InputManager.m_Instance.a_PressedInputSweep += (tile) => ExecuteInput("Sweep", tile);
+                InputManager.m_Instance.a_PressedInputSweep -= (tile) => ExecuteInput(TileStatesConstants.SWEEP_ACTION, tile);
+                InputManager.m_Instance.a_PressedInputSweep += (tile) => ExecuteInput(TileStatesConstants.SWEEP_ACTION, tile);
 
                 m_boardController.a_OnFlag -= FlagTile;
                 m_boardController.a_OnFlag += FlagTile;
@@ -116,7 +116,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             {
                 m_boardController.minesPositions.ForEach((mine) =>
                 {
-                    if (mine.m_currentState.m_stateName.CompareTo("FlaggedTileState") != 0)
+                    if (mine.m_currentState.m_stateName.CompareTo(TileStatesConstants.FLAGGED_TILE_STATE) != 0)
                         ExecuteInput("Flag", mine);
                 });
                 EndGame(true);
@@ -146,7 +146,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                     if (currentTile.m_isMine)
                         continue;
                     //if tile isn't in normalState
-                    if (currentTile.m_currentState.m_stateName.CompareTo("NormalTileState") != 0)
+                    if (currentTile.m_currentState.m_stateName.CompareTo(TileStatesConstants.NORMAL_TILE_STATE) != 0)
                         continue;
                     if (currentTile.m_isSwiping)
                         continue;

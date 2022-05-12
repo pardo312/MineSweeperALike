@@ -7,6 +7,13 @@ using UnityEngine;
 
 namespace JiufenGames.MineSweeperAlike.Board.Logic
 {
+    public struct BoardData
+    {
+        public List<Vector2Int> minesPositions;
+        public List<Vector2Int> sweepedTilePositions;
+        public List<Vector2Int> flaggedPositions;
+    }
+
     public class BoardController : BoardControllerFullContainerBase<MineSweeperTile>
     {
         [SerializeField] private RectTransform m_boardBackground;
@@ -47,10 +54,10 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             {
                 m_numberOfTiles = (m_numberOfRows * m_numberOfColumns);
                 OnBoardCreated(data);
-                StartCoroutine(WaitForSeconds(.5f , () =>
-                    {
-                        callback?.Invoke(data);
-                    }));
+                StartCoroutine(WaitForSeconds(.5f, () =>
+                   {
+                       callback?.Invoke(data);
+                   }));
             });
 
         }
@@ -115,6 +122,46 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 boardListSize--;
             }
             SetNumberBaseOnMinesAroundIt(m_numberOfRows, m_numberOfColumns);
+        }
+
+        public void SaveMatch()
+        {
+            List<Vector2Int> minesPos = new List<Vector2Int>();
+            minesPositions.ForEach((mine) => minesPos.Add(new Vector2Int(mine.m_tileRow, mine.m_tileColumn)));
+
+            List<Vector2Int> sweepPos = new List<Vector2Int>();
+            List<Vector2Int> flaggedPos = new List<Vector2Int>();
+
+            for (int i = 0; i < m_board.GetLength(0); i++)
+            {
+                for (int j = 0; j < m_board.GetLength(1); j++)
+                {
+                    if (m_board[i, j].m_currentState.Equals(TileStatesConstants.FLAGGED_TILE_STATE))
+                        sweepPos.Add(new Vector2Int(i, j));
+                    else if (m_board[i, j].m_currentState.Equals(TileStatesConstants.SWEPT_TILE_STATE))
+                        flaggedPos.Add(new Vector2Int(i, j));
+                }
+            }
+
+            BoardData boardData = new BoardData()
+            {
+                flaggedPositions = flaggedPos,
+                minesPositions = minesPos,
+                sweepedTilePositions = sweepPos
+            };
+        }
+
+        public void LoadMatch(BoardData boardData)
+        {
+            CreateBoard(new BaseBoardPayload() { _rows = m_numberOfRows, _columns = m_numberOfColumns, _squaredTiles = true }, callback: (data) => a_OnBoardCreated?.Invoke());
+            boardData.minesPositions.ForEach((minePos) =>
+            {
+                m_board[minePos.x, minePos.y].m_isMine = true;
+                minesPositions.Add(m_board[minePos.x, minePos.y]);
+            });
+
+            boardData.flaggedPositions.ForEach((flaggedPos) => m_board[flaggedPos.x, flaggedPos.y].ExecuteCurrentStateAction(TileStatesConstants.FLAG_ACTION, true));
+            boardData.sweepedTilePositions.ForEach((sweeptPos) => m_board[sweeptPos.x, sweeptPos.y].ExecuteCurrentStateAction(TileStatesConstants.SWEEP_ACTION, true));
         }
 
         IEnumerator WaitForSeconds(float seconds, Action callback)

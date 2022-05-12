@@ -83,6 +83,5 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         }
         #endregion <<<OnTick>>>
         #endregion ----Methods----
-
     }
 }
