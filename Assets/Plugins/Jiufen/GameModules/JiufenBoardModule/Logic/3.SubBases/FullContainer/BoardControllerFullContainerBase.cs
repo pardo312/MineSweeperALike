@@ -9,8 +9,11 @@ namespace JiufenGames.Board.Logic
         {
             //Init Payload
             BaseBoardPayload boardPayload;
-            if (payload.GetType() != typeof(BaseBoardPayload))
+            if (!BoardHelpers.IsSameOrSubclass(typeof(BaseBoardPayload), payload.GetType()))
+            {
+                Debug.LogError("Board init data isn't the correct type.");
                 return;
+            }
             boardPayload = (BaseBoardPayload)payload;
 
             //Set variables
@@ -84,6 +87,7 @@ namespace JiufenGames.Board.Logic
 
             _endCreationCallback(new BaseBoardDto { _sizeOfTiles = sizeOfTile });
         }
+
 
     }
 }

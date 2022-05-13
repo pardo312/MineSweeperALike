@@ -1,7 +1,7 @@
+using JiufenGames.Board.Logic;
 using JiufenGames.MineSweeperAlike.Board.Logic;
 using JiufenPackages.ServiceLocator;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Timba.Games.SacredTails.PopupModule;
 using UnityEngine;
@@ -13,11 +13,10 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
     {
         #region Fields
         [SerializeField] private BoardController m_boardController;
-        [SerializeField] private FlagsController m_flagsLeftController;
+        [SerializeField] private FlagsController m_flagsController;
+        [SerializeField] private SweepController m_sweepController;
         [SerializeField] private CameraZoomController m_cameraZoomController;
-        [SerializeField] private int m_notClearedTiles = 0;
 
-        [SerializeField, Range(.01f, .1f)] private float m_sweepClearTileAnimTime = .05f;
         private bool isReady = false;
         #endregion Fields
 
@@ -28,37 +27,39 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             LeanTween.init(2300);
             m_boardController.a_OnBoardCreated += () =>
             {
-                m_flagsLeftController.Init(m_boardController);
-                m_notClearedTiles = m_boardController.m_numberOfTiles - m_boardController.m_numberOfBombs;
-
-                m_boardController.a_OnNormalTileSweep -= ReduceNotSweepedTiles;
-                m_boardController.a_OnNormalTileSweep += ReduceNotSweepedTiles;
-
-                m_boardController.a_OnClearTileSweep -= SweepClearTile;
-                m_boardController.a_OnClearTileSweep += SweepClearTile;
-
-                m_boardController.a_OnFlag -= FlagTile;
-                m_boardController.a_OnFlag += FlagTile;
-
-                InputManager.m_Instance.a_PressedInputFlag -= (tile) => ExecuteInput(TileStatesConstants.FLAG_ACTION, tile);
-                InputManager.m_Instance.a_PressedInputFlag += (tile) => ExecuteInput(TileStatesConstants.FLAG_ACTION, tile);
-
-                InputManager.m_Instance.a_PressedInputSweep -= (tile) => ExecuteInput(TileStatesConstants.SWEEP_ACTION, tile);
-                InputManager.m_Instance.a_PressedInputSweep += (tile) => ExecuteInput(TileStatesConstants.SWEEP_ACTION, tile);
-
-                m_boardController.a_OnFlag -= FlagTile;
-                m_boardController.a_OnFlag += FlagTile;
-
-                m_boardController.a_OnDeFlag -= DeflagTile;
-                m_boardController.a_OnDeFlag += DeflagTile;
-
-                m_boardController.a_OnExplodeMine -= () => EndGame(false);
-                m_boardController.a_OnExplodeMine += () => EndGame(false);
-
                 m_cameraZoomController.Init(m_boardController.m_tileParent.GetComponent<RectTransform>());
+                m_flagsController.Init(m_boardController);
+                m_sweepController.Init(m_boardController, m_flagsController, m_boardController.m_numberOfTiles - m_boardController.m_numberOfBombs);
+
+                SubscribeToEvents();
+
                 isReady = true;
             };
-            m_boardController.Init();
+
+            MinesweeperPayload payload = new MinesweeperPayload()
+            {
+                _columns = PlayerPrefs.GetInt("numColumns", 8),
+                _rows = PlayerPrefs.GetInt("numRows", 8),
+                _mines = PlayerPrefs.GetInt("numBombs", 10),
+                _squaredTiles = true
+            };
+            m_boardController.Init(payload);
+        }
+
+        public void SubscribeToEvents()
+        {
+            InputManager.m_Instance.a_PressedInputFlag += (tile) => ExecuteInput(TileStatesConstants.FLAG_ACTION, tile);
+            InputManager.m_Instance.a_PressedInputSweep += (tile) => ExecuteInput(TileStatesConstants.SWEEP_ACTION, tile);
+
+            m_sweepController.a_endGame += EndGame;
+            m_sweepController.a_executeInput += ExecuteInput;
+
+            m_boardController.a_OnNormalTileSweep += m_sweepController.ReduceNotSweepedTiles;
+            m_boardController.a_OnClearTileSweep += m_sweepController.SweepClearTile;
+            m_boardController.a_OnFlag += FlagTile;
+            m_boardController.a_OnDeFlag += DeflagTile;
+            m_boardController.a_OnExplodeMine += () => EndGame(false);
+
         }
         #endregion Init
 
@@ -72,12 +73,12 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             if (String.IsNullOrEmpty(_stateToChange))
                 return;
 
-            _tile.ExecuteCurrentStateAction(_stateToChange, m_flagsLeftController.m_numberOfFlagsLeft > 0);
+            _tile.ExecuteCurrentStateAction(_stateToChange, m_flagsController.m_numberOfFlagsLeft > 0);
         }
 
         public void ResetGame()
         {
-            if (isReady && m_boardController.m_numberOfTiles != m_notClearedTiles)
+            if (isReady && m_boardController.m_numberOfTiles != m_sweepController.m_notClearedTiles)
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
         }
 
@@ -107,86 +108,36 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         }
         #endregion GameFlow
 
-        #region Sweep
-        private void ReduceNotSweepedTiles()
-        {
-            m_notClearedTiles--;
-            //All tiles swept, no matter the flags
-            if (m_notClearedTiles == 0)
-            {
-                m_boardController.minesPositions.ForEach((mine) =>
-                {
-                    if (mine.m_currentState.m_stateName.CompareTo(TileStatesConstants.FLAGGED_TILE_STATE) != 0)
-                        ExecuteInput("Flag", mine);
-                });
-                EndGame(true);
-            }
-        }
-
-        private void SweepClearTile(int _row, int _column)
-        {
-            ReduceNotSweepedTiles();
-            StartCoroutine(SweepAllClearTilesAround(_row, _column));
-        }
-
-        private IEnumerator SweepAllClearTilesAround(int _row, int _column)
-        {
-            for (int k = -1; k <= 1; k++)
-            {
-                for (int l = -1; l <= 1; l++)
-                {
-                    //if tile = tileChecking(originaltile)
-                    if (k == 0 && l == 0)
-                        continue;
-                    //if tile outsideBounds
-                    if (!CheckIfInsideBoundsOfBoard(_row + k, _column + l))
-                        continue;
-                    MineSweeperTile currentTile = m_boardController.m_board[_row + k, _column + l];
-                    //if tile hasMine
-                    if (currentTile.m_isMine)
-                        continue;
-                    //if tile isn't in normalState
-                    if (currentTile.m_currentState.m_stateName.CompareTo(TileStatesConstants.NORMAL_TILE_STATE) != 0)
-                        continue;
-                    if (currentTile.m_isSwiping)
-                        continue;
-
-                    currentTile.m_isSwiping = true;
-
-                    //Sweep tile and reduce the not sweeped tiles
-                    yield return new WaitForSeconds(m_sweepClearTileAnimTime);
-                    currentTile.ExecuteCurrentStateAction("Sweep", m_flagsLeftController.m_numberOfFlagsLeft > 0);
-
-                    currentTile.m_isSwiping = false;
-                }
-            }
-            yield return null;
-        }
-
-        private bool CheckIfInsideBoundsOfBoard(int row, int column)
-        {
-            if (m_boardController.m_board.GetLength(0) <= row || row < 0)
-                return false;
-            if (m_boardController.m_board.GetLength(1) <= column || column < 0)
-                return false;
-
-            return true;
-        }
-        #endregion SweepClearTile
-
         #region Flagging
         private void DeflagTile(bool _isMine, int _row, int _column)
         {
-            m_flagsLeftController.DeflagTile(_isMine, m_boardController.m_numberOfBombs);
+            m_flagsController.DeflagTile(_isMine, m_boardController.m_numberOfBombs);
         }
 
         private void FlagTile(bool _isMine, int _row, int _column)
         {
-            m_flagsLeftController.FlagTile(_isMine);
-            if (m_notClearedTiles == 0 && m_flagsLeftController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
+            m_flagsController.FlagTile(_isMine);
+            if (m_sweepController.m_notClearedTiles == 0 && m_flagsController.AreAllMinesFlagged(m_boardController.m_numberOfBombs))
                 EndGame(true);
         }
         #endregion Flagging
+
+        #region OnDisable
+        public void OnDisable()
+        {
+            InputManager.m_Instance.a_PressedInputFlag -= (tile) => ExecuteInput(TileStatesConstants.FLAG_ACTION, tile);
+            InputManager.m_Instance.a_PressedInputSweep -= (tile) => ExecuteInput(TileStatesConstants.SWEEP_ACTION, tile);
+
+            m_sweepController.a_endGame += EndGame;
+            m_sweepController.a_executeInput += ExecuteInput;
+
+            m_boardController.a_OnNormalTileSweep += m_sweepController.ReduceNotSweepedTiles;
+            m_boardController.a_OnClearTileSweep += m_sweepController.SweepClearTile;
+            m_boardController.a_OnFlag -= FlagTile;
+            m_boardController.a_OnDeFlag -= DeflagTile;
+            m_boardController.a_OnExplodeMine -= () => EndGame(false);
+        }
+        #endregion OnDisable
         #endregion Methods
     }
 }

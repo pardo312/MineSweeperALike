@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JiufenGames.Board.Logic
 {
-    public struct BaseBoardPayload
+    public class BaseBoardPayload
     {
         public int _rows, _columns;
         public bool _squaredTiles;

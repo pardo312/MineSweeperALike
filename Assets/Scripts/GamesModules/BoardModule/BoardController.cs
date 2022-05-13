@@ -16,6 +16,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
 
     public class BoardController : BoardControllerFullContainerBase<MineSweeperTile>
     {
+        #region ----Fields----
         [SerializeField] private RectTransform m_boardBackground;
 
         public int m_numberOfTiles = 0;
@@ -27,24 +28,32 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
         public event Action a_OnNormalTileSweep;
         public event Action<int, int> a_OnClearTileSweep;
 
-        public event Action a_PressedInputFlag;
-        public event Action a_PressedInputSweep;
-
         public event Action<bool, int, int> a_OnFlag;
         public event Action<bool, int, int> a_OnDeFlag;
 
         public event Action a_OnExplodeMine;
         public event Action a_OnBoardCreated;
 
-
         public event Action<string, MineSweeperTile, Action<Sprite>> a_OnChangeState;
-        public override void Init()
-        {
-            m_numberOfBombs = PlayerPrefs.GetInt("numBombs", m_numberOfBombs);
-            m_numberOfRows = PlayerPrefs.GetInt("numRows", m_numberOfRows);
-            m_numberOfColumns = PlayerPrefs.GetInt("numColumns", m_numberOfColumns);
+        #endregion ----Fields----
 
-            CreateBoard(new BaseBoardPayload() { _rows = m_numberOfRows, _columns = m_numberOfColumns, _squaredTiles = true }, callback: (data) => a_OnBoardCreated?.Invoke());
+        #region ----Methods----
+        public override void Init(object data)
+        {
+            MinesweeperPayload boardPayload;
+            if (data.GetType() != typeof(MinesweeperPayload))
+            {
+                Debug.LogError("Board init data isn't the correct type.");
+                return;
+            }
+
+            boardPayload = (MinesweeperPayload)data;
+
+            m_numberOfRows = boardPayload._rows;
+            m_numberOfColumns = boardPayload._columns;
+            m_numberOfBombs = boardPayload._mines;
+
+            CreateBoard((BaseBoardPayload)boardPayload, callback: (data) => a_OnBoardCreated?.Invoke());
         }
 
         public override void CreateBoard(object _payload, Action<int, int> _createdTile = null, Action<object> callback = null)
@@ -87,7 +96,7 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
         public void OnBoardCreated(object data)
         {
             BaseBoardDto boardDto;
-            if (data.GetType() != typeof(BaseBoardDto))
+            if (!MinesweeperHelpers.IsSameOrSubclass(typeof(BaseBoardDto), data.GetType()))
                 return;
             boardDto = (BaseBoardDto)data;
 
@@ -124,48 +133,6 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 boardListSize--;
             }
             SetNumberBaseOnMinesAroundIt(m_numberOfRows, m_numberOfColumns);
-        }
-
-        [ContextMenu("Do it!")]
-        public void SaveMatch()
-        {
-            List<Vector2Int> minesPos = new List<Vector2Int>();
-            minesPositions.ForEach((mine) => minesPos.Add(new Vector2Int(mine.m_tileRow, mine.m_tileColumn)));
-
-            List<Vector2Int> sweepPos = new List<Vector2Int>();
-            List<Vector2Int> flaggedPos = new List<Vector2Int>();
-
-            for (int i = 0; i < m_board.GetLength(0); i++)
-            {
-                for (int j = 0; j < m_board.GetLength(1); j++)
-                {
-                    if (m_board[i, j].m_currentState.m_stateName.Equals(TileStatesConstants.FLAGGED_TILE_STATE))
-                        sweepPos.Add(new Vector2Int(i, j));
-                    else if (m_board[i, j].m_currentState.m_stateName.Equals(TileStatesConstants.SWEPT_TILE_STATE))
-                        flaggedPos.Add(new Vector2Int(i, j));
-                }
-            }
-
-            BoardData boardData = new BoardData()
-            {
-                flaggedPositions = flaggedPos,
-                minesPositions = minesPos,
-                sweepedTilePositions = sweepPos
-            };
-            Debug.Log(JsonUtility.ToJson(boardData));
-        }
-
-        public void LoadMatch(BoardData boardData)
-        {
-            CreateBoard(new BaseBoardPayload() { _rows = m_numberOfRows, _columns = m_numberOfColumns, _squaredTiles = true }, callback: (data) => a_OnBoardCreated?.Invoke());
-            boardData.minesPositions.ForEach((minePos) =>
-            {
-                m_board[minePos.x, minePos.y].m_isMine = true;
-                minesPositions.Add(m_board[minePos.x, minePos.y]);
-            });
-
-            boardData.flaggedPositions.ForEach((flaggedPos) => m_board[flaggedPos.x, flaggedPos.y].ExecuteCurrentStateAction(TileStatesConstants.FLAG_ACTION, true));
-            boardData.sweepedTilePositions.ForEach((sweeptPos) => m_board[sweeptPos.x, sweeptPos.y].ExecuteCurrentStateAction(TileStatesConstants.SWEEP_ACTION, true));
         }
 
         IEnumerator WaitForSeconds(float seconds, Action callback)
@@ -205,5 +172,6 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 return;
             numberOfMines++;
         }
+        #endregion ----Methods----
     }
 }

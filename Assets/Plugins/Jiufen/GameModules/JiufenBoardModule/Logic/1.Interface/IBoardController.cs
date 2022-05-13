@@ -10,7 +10,7 @@ namespace JiufenGames.Board.Logic
         Transform m_tileParent { get; }
         T[,] m_board { get; }
 
-        void Init();
+        void Init(object data);
         void CreateBoard(object payload, Action<int,int> createdTile = null, Action<object> _endCreationCallback = null);
 
     }

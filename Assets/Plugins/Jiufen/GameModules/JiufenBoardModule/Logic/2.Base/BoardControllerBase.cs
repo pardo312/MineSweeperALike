@@ -25,7 +25,7 @@ namespace JiufenGames.Board.Logic
         #endregion Fields
 
         #region Methods
-        public abstract void Init();
+        public abstract void Init(object data);
 
         public abstract void CreateBoard(object payload, Action<int, int> _createdTile = null, Action<object> _endCreationCallback = null);
 

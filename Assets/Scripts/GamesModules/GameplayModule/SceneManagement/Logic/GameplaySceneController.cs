@@ -11,11 +11,11 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
 {
     public class GameplaySceneController : SceneController
     {
-        public GameplayController gameplaController;
+        public GameplayController gameplayController;
         public override void Init<T>(T _data, Action<bool> _callback = null)
         {
             _callback?.Invoke(true);
-            gameplaController.Init();
+            gameplayController.Init();
         }
 
         public void GoBackHome()
