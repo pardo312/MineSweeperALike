@@ -16,12 +16,15 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
 
         [SerializeField] private GameObject m_UnpausePanel;
         [SerializeField] private Image m_UnpauseCover;
+        private bool onAnim;
         #endregion ----Fields----
 
         #region ----Methods----
         [ContextMenu("1")]
         public void ExpandPauseMenu()
         {
+            if (onAnim)
+                return;
             AnimatePauseContainer(500, m_UnpausePanel, m_UnpauseCover, m_PausePanel, m_PauseCover);
             LeanTween.rotate(m_UnpausePanel, new Vector3(0, 0, -90), m_animTime);
             LeanTween.scale(m_UnpausePanel, Vector3.one * 0.05f, m_animTime);
@@ -30,6 +33,8 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
         [ContextMenu("2")]
         public void ContractPauseMenu()
         {
+            if (onAnim)
+                return;
             AnimatePauseContainer(0, m_PausePanel, m_PauseCover, m_UnpausePanel, m_UnpauseCover);
             LeanTween.rotate(m_UnpausePanel, new Vector3(0, 0, 0), m_animTime);
             LeanTween.scale(m_UnpausePanel, Vector3.one, m_animTime);
@@ -37,6 +42,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
 
         public void AnimatePauseContainer(int finalValue, GameObject _panel1ToHide, Image _cover1ToShow, GameObject _panel2ToShow, Image _cover2ToHide)
         {
+            onAnim = true;
             Vector2 tempSize = m_circleMiddleRectTransform.sizeDelta;
             RectTransform _maskTransform = m_pauseMask.GetComponent<RectTransform>();
             Color tempColor;
@@ -52,6 +58,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
             .setOnComplete(() =>
             {
                 _panel1ToHide.SetActive(false);
+            onAnim = false;
             });
 
             _panel2ToShow.SetActive(true);
