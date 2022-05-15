@@ -52,9 +52,11 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             m_numberOfRows = boardPayload._rows;
             m_numberOfColumns = boardPayload._columns;
             m_numberOfBombs = boardPayload._mines;
+            m_isLoadingSavedMatch = boardPayload._loadingSavedMatch;
 
             CreateBoard((BaseBoardPayload)boardPayload, callback: (data) => a_OnBoardCreated?.Invoke());
         }
+        public bool m_isLoadingSavedMatch = false;
 
         public override void CreateBoard(object _payload, Action<int, int> _createdTile = null, Action<object> callback = null)
         {
@@ -66,6 +68,8 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
                 StartCoroutine(WaitForSeconds(.5f, () =>
                    {
                        callback?.Invoke(data);
+                       if (m_isLoadingSavedMatch)
+                           SetNumberBaseOnMinesAroundIt(m_numberOfRows, m_numberOfColumns);
                    }));
             });
 
@@ -110,6 +114,8 @@ namespace JiufenGames.MineSweeperAlike.Board.Logic
             m_boardBackground.sizeDelta = new Vector2(widthBackground, heightBackground);
             parentRectTransform.sizeDelta = new Vector2(widthBackground, heightBackground);
 
+            if (m_isLoadingSavedMatch)
+                return;
             List<Vector2> boardList = new List<Vector2>();
             for (int i = 0; i < m_board.GetLength(0); i++)
                 for (int j = 0; j < m_board.GetLength(1); j++)

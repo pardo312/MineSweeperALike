@@ -4,7 +4,6 @@ using JiufenPackages.SceneFlow.Logic;
 using JiufenPackages.ServiceLocator;
 using System;
 using System.Collections;
-using Timba.Games.SacredTails.PopupModule;
 using UnityEngine;
 
 namespace JiufenGames.MineSweeperAlike.SceneManagement

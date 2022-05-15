@@ -46,11 +46,11 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             {
                 m_isPressing = false;
                 m_timePressing = 0;
-                InputManager.m_Instance.SweepTile(m_mineSweeperTile);
+                TileInputController.m_Instance.SweepTile(m_mineSweeperTile);
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                InputManager.m_Instance.FlagTile(m_mineSweeperTile);
+                TileInputController.m_Instance.FlagTile(m_mineSweeperTile);
             }
         }
 
@@ -63,7 +63,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 {
                     m_timePressing = 0;
                     m_isPressing = false;
-                    InputManager.m_Instance.FlagTile(m_mineSweeperTile);
+                    TileInputController.m_Instance.FlagTile(m_mineSweeperTile);
                 }
             }
         }

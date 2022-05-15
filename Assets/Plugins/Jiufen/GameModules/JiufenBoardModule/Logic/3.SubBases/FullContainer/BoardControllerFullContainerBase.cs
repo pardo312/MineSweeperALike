@@ -87,7 +87,5 @@ namespace JiufenGames.Board.Logic
 
             _endCreationCallback(new BaseBoardDto { _sizeOfTiles = sizeOfTile });
         }
-
-
     }
 }

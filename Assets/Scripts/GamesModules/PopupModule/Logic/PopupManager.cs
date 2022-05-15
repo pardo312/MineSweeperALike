@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Timba.Games.SacredTails.PopupModule
+namespace JiufenGames.PopupModule
 {
     public class PopupManager : MonoBehaviour, IPopupManager
     {
@@ -48,7 +48,11 @@ namespace Timba.Games.SacredTails.PopupModule
             {
                 buttons[(int)buttonActionPair.Key].onClick.RemoveAllListeners();
                 buttons[(int)buttonActionPair.Key].gameObject.SetActive(true);
-                buttons[(int)buttonActionPair.Key].onClick.AddListener(() => buttonActionPair.Value?.Invoke());
+                buttons[(int)buttonActionPair.Key].onClick.AddListener(() =>
+                {
+                    buttonActionPair.Value?.Invoke();
+                    HideInfoPopup();
+                });
             }
 
             infoPopupPanelWithBG.gameObject.SetActive(true);

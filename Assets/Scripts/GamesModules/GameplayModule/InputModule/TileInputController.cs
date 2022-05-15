@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
-    public class InputManager : MonoBehaviour
+    public class TileInputController : MonoBehaviour
     {
         #region Singleton
-        public static InputManager m_Instance;
+        public static TileInputController m_Instance;
         public void Awake()
         {
             if(m_Instance == null)

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Timba.Games.SacredTails.PopupModule
+namespace JiufenGames.PopupModule
 {
     public interface IPopupManager : IService
     {

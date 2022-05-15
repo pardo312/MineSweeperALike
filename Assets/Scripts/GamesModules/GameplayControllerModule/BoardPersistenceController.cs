@@ -1,19 +1,24 @@
 ﻿using JiufenGames.MineSweeperAlike.Board.Logic;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 {
-    public class PlayeDataController : MonoBehaviour
+    public class BoardPersistenceController : MonoBehaviour
     {
-        public BoardController boardController;
+        #region ----Fields-----
+        private BoardController boardController;
+        #endregion  ----Fields-----
+
+        #region ----Methods-----
         public void Init(BoardController _boardController)
         {
             boardController = _boardController;
         }
 
         [ContextMenu("Do it!")]
-        public void SaveMatch()
+        public BoardData SaveMatch()
         {
             List<Vector2Int> minesPos = new List<Vector2Int>();
             boardController.minesPositions.ForEach((mine) => minesPos.Add(new Vector2Int(mine.m_tileRow, mine.m_tileColumn)));
@@ -26,9 +31,9 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 for (int j = 0; j < boardController.m_board.GetLength(1); j++)
                 {
                     if (boardController.m_board[i, j].m_currentState.m_stateName.Equals(TileStatesConstants.FLAGGED_TILE_STATE))
-                        sweepPos.Add(new Vector2Int(i, j));
-                    else if (boardController.m_board[i, j].m_currentState.m_stateName.Equals(TileStatesConstants.SWEPT_TILE_STATE))
                         flaggedPos.Add(new Vector2Int(i, j));
+                    else if (boardController.m_board[i, j].m_currentState.m_stateName.Equals(TileStatesConstants.SWEPT_TILE_STATE))
+                        sweepPos.Add(new Vector2Int(i, j));
                 }
             }
 
@@ -38,7 +43,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 minesPositions = minesPos,
                 sweepedTilePositions = sweepPos
             };
-            PlayerPrefs.SetString("saveBoard", JsonUtility.ToJson(boardData));
+            return boardData;
         }
 
         public void LoadMatch(BoardData boardData)
@@ -50,8 +55,15 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             });
 
             boardData.flaggedPositions.ForEach((flaggedPos) => boardController.m_board[flaggedPos.x, flaggedPos.y].ExecuteCurrentStateAction(TileStatesConstants.FLAG_ACTION, true));
-            boardData.sweepedTilePositions.ForEach((sweeptPos) => boardController.m_board[sweeptPos.x, sweeptPos.y].ExecuteCurrentStateAction(TileStatesConstants.SWEEP_ACTION, true));
+            StartCoroutine(LoadSweeptTiles(boardData.sweepedTilePositions));
         }
 
+        IEnumerator LoadSweeptTiles(List<Vector2Int> sweepedTilePositions)
+        {
+            //yield return new WaitForSeconds(.7f);
+            yield return new WaitForEndOfFrame();
+            sweepedTilePositions.ForEach((sweeptPos) => boardController.m_board[sweeptPos.x, sweeptPos.y].ExecuteCurrentStateAction(TileStatesConstants.SWEEP_ACTION, true));
+        }
+        #endregion ----Methods-----
     }
 }

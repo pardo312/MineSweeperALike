@@ -1,5 +1,6 @@
 ﻿using JiufenGames.MineSweeperAlike.InputModule;
 using JiufenPackages.ServiceLocator;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -17,13 +18,15 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         public float timeAnimation = 5;
         public float positionChangeY = 150;
         bool skipAnim = false;
+
+        public Action a_onEndAnimation;
         #endregion ----Fields----
 
         #region ----Methods----
         public void Init()
         {
             ServiceLocator.m_Instance.GetService<IInputManager>().inputs.UI.Click.performed += ctx => skipAnim = true;
-            StartCoroutine(TextAppearingAnimationCoroutine(positionChangeY, timeAnimation ));
+            StartCoroutine(TextAppearingAnimationCoroutine(positionChangeY, timeAnimation));
         }
 
         IEnumerator TextAppearingAnimationCoroutine(float finalPositionChangeY, float timeOfAnimSeg)
@@ -94,7 +97,11 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
                       tempColor.a = value;
                       playButtonCover.color = tempColor;
                   })
-                .setOnComplete(()=> playButtonCover.gameObject.SetActive(false) );
+                .setOnComplete(() =>
+                {
+                    playButtonCover.gameObject.SetActive(false);
+                    a_onEndAnimation?.Invoke();
+                });
         }
         #endregion ----Methods----
     }
