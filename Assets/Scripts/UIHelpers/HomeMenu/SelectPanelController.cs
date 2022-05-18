@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace JiufenGames.MineSweeperAlike.UIHelpers
 {
-    public class HomePanelSelectController : MonoBehaviour
+    public class SelectPanelController : MonoBehaviour
     {
         #region ----Fields----
         private bool isAnimating;
@@ -17,7 +17,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
         [SerializeField] private float animationTime = .25f;
 
         [Header("References")]
-        [SerializeField] private SelectOptionPanel[] panels;
+        [SerializeField] private SelectOptionPanelDto[] panels;
 
         #endregion ----Fields----
 
@@ -43,8 +43,8 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
 
         public void PanelAnimation(int buttonIndex, bool isOpen)
         {
-            if (isOpen)
-                panels[buttonIndex].panelTransform.gameObject.SetActive(isOpen);
+            rootLayoutParent.offsetMin = new Vector2(rootLayoutParent.offsetMin.x, isOpen ? -1700 : 0);
+            panels[buttonIndex].panelTransform.gameObject.SetActive(isOpen);
 
             panels[buttonIndex].panelTitleText.color = panelTitleColors[isOpen ? 1 : 0];
             int targetPosition = isOpen ? panels[buttonIndex].middlePanelSizeY : 0;
