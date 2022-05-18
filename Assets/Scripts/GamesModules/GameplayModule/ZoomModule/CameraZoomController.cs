@@ -63,7 +63,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 Vector2 primaryTouch = inputs.UI.PrimaryTouch.ReadValue<Vector2>();
                 float distance = Vector2.Distance(primaryTouch, prevPrimaryTouch);
 
-                if (distance > 3 && distance < 100)
+                if (distance > 2 && distance < 100)
                 {
                     float addPivotX = (primaryTouch - prevPrimaryTouch).x * (.0005f * movementSpeed * (1 / boardTransform.localScale.x));
                     if (boardTransform.pivot.x - addPivotX < 0)
