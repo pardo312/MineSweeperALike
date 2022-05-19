@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.05634, y: -5}
+  m_AnchoredPosition: {x: 663.30634, y: -5}
   m_SizeDelta: {x: 1255.203, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4348009
@@ -452,7 +452,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.05634, y: -1001.03}
+  m_AnchoredPosition: {x: 663.30634, y: -1001.03}
   m_SizeDelta: {x: 1255.203, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &60642454
@@ -1466,7 +1466,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.05634, y: -669.02}
+  m_AnchoredPosition: {x: 663.30634, y: -669.02}
   m_SizeDelta: {x: 1255.203, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &317431943
@@ -1608,7 +1608,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.0563, y: -171.005}
+  m_AnchoredPosition: {x: 663.3063, y: -171.005}
   m_SizeDelta: {x: 1292.3652, y: 208.83}
   m_Pivot: {x: 0.49999997, y: 0.5}
 --- !u!114 &349120704
@@ -1682,9 +1682,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1385357399}
-        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.HomePanelSelectController,
+        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.SelectPanelController,
           Assembly-CSharp
-        m_MethodName: OpenButton
+        m_MethodName: ClickButtonAnimation
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1983,7 +1983,7 @@ GameObject:
   - component: {fileID: 459904415}
   - component: {fileID: 459904417}
   m_Layer: 5
-  m_Name: Options_Scroll
+  m_Name: Solo_ScrollView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2836,7 +2836,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.0563, y: -835.025}
+  m_AnchoredPosition: {x: 663.3063, y: -835.025}
   m_SizeDelta: {x: 1292.3652, y: 208.83}
   m_Pivot: {x: 0.49999997, y: 0.5}
 --- !u!114 &647922333
@@ -2884,9 +2884,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1385357399}
-        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.HomePanelSelectController,
+        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.SelectPanelController,
           Assembly-CSharp
-        m_MethodName: OpenButton
+        m_MethodName: ClickButtonAnimation
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4360,7 +4360,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.0563, y: -503.015}
+  m_AnchoredPosition: {x: 663.3063, y: -503.015}
   m_SizeDelta: {x: 1292.3652, y: 208.83}
   m_Pivot: {x: 0.49999997, y: 0.5}
 --- !u!114 &965205843
@@ -4408,9 +4408,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1385357399}
-        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.HomePanelSelectController,
+        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.SelectPanelController,
           Assembly-CSharp
-        m_MethodName: OpenButton
+        m_MethodName: ClickButtonAnimation
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5919,7 +5919,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.0563, y: -1167.035}
+  m_AnchoredPosition: {x: 663.3063, y: -1167.035}
   m_SizeDelta: {x: 1292.3652, y: 208.83}
   m_Pivot: {x: 0.49999997, y: 0.5}
 --- !u!114 &1182520178
@@ -5967,9 +5967,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1385357399}
-        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.HomePanelSelectController,
+        m_TargetAssemblyTypeName: JiufenGames.MineSweeperAlike.UIHelpers.SelectPanelController,
           Assembly-CSharp
-        m_MethodName: OpenButton
+        m_MethodName: ClickButtonAnimation
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6420,7 +6420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.05634, y: -1333.04}
+  m_AnchoredPosition: {x: 663.30634, y: -1333.04}
   m_SizeDelta: {x: 1255.203, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1307521285
@@ -6969,8 +6969,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -854.718}
-  m_SizeDelta: {x: -17, y: 1709.4363}
+  m_AnchoredPosition: {x: -4.25, y: 0}
+  m_SizeDelta: {x: -8.5, y: 0.00012207031}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1385357398
 MonoBehaviour:
@@ -7010,6 +7010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983f48b36e3f0d347bb6441fb0c2daf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollRect: {fileID: 459904415}
   panelTitleColors:
   - {r: 0, g: 0, b: 0, a: 1}
   - {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 1}
@@ -7019,18 +7020,22 @@ MonoBehaviour:
     panelTransform: {fileID: 1506525796}
     panelMask: {fileID: 198944158}
     middlePanelSizeY: 950
+    containerMinY: -875
   - panelTitleText: {fileID: 1348728851}
     panelTransform: {fileID: 1218924408}
     panelMask: {fileID: 793573144}
     middlePanelSizeY: 950
+    containerMinY: -875
   - panelTitleText: {fileID: 83576468}
     panelTransform: {fileID: 1043852988}
     panelMask: {fileID: 1095284384}
     middlePanelSizeY: 950
+    containerMinY: -875
   - panelTitleText: {fileID: 1122964063}
     panelTransform: {fileID: 574486203}
     panelMask: {fileID: 1867378627}
     middlePanelSizeY: 1900
+    containerMinY: -1700
 --- !u!1 &1477913621
 GameObject:
   m_ObjectHideFlags: 0
@@ -7211,7 +7216,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 646.1826, y: -683.83}
+  m_AnchoredPosition: {x: 646.1826, y: -481.39307}
   m_SizeDelta: {x: 1292.4, y: 950}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1506525798
@@ -8831,7 +8836,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 659.05634, y: -337.01}
+  m_AnchoredPosition: {x: 663.30634, y: -337.01}
   m_SizeDelta: {x: 1255.203, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1861227506
