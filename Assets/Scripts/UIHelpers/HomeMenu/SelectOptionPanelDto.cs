@@ -10,6 +10,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
         public GameObject panelTransform;
         public RectTransform panelMask;
         public int middlePanelSizeY;
+        public int containerMinY;
     }
 
 }
