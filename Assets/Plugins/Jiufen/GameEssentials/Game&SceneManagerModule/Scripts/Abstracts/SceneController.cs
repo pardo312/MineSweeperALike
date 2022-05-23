@@ -16,7 +16,7 @@ namespace JiufenPackages.SceneFlow.Logic
         /// </summary>
         /// <param name="_data">Data of the scene.</param>
         /// <param name="_callback">Callback use to hide the loading scene</param>
-        public abstract void Init<T>(T _data, Action<bool> _callback = null);
+        public abstract void Init(DataResponseModel _data, Action<bool> _callback = null);
         #endregion Methods
     }
 }

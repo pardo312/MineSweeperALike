@@ -11,6 +11,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
         public RectTransform panelMask;
         public int middlePanelSizeY;
         public int containerMinY;
+        public Transform optionsContainer;
     }
 
 }

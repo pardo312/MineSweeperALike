@@ -1,5 +1,6 @@
 using JiufenGames.Board.Logic;
 using JiufenGames.MineSweeperAlike.Gameplay.Logic;
+using JiufenGames.MineSweeperAlike.HomeModule;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,13 +8,6 @@ using UnityEngine;
 
 namespace JiufenGames.MineSweeperAlike.Board.Logic
 {
-    public struct BoardData
-    {
-        public List<Vector2Int> minesPositions;
-        public List<Vector2Int> sweepedTilePositions;
-        public List<Vector2Int> flaggedPositions;
-    }
-
     public class BoardController : BoardControllerFullContainerBase<MineSweeperTile>
     {
         #region ----Fields----

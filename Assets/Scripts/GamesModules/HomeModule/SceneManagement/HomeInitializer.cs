@@ -8,14 +8,24 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
     {
         public string m_sceneName => SceneNames.HOME;
 
-        public void GetData(Action<object> callback)
+        public void GetData(Action<DataResponseModel> callback)
         {
-            callback?.Invoke(null);
+            callback?.Invoke(new DataResponseModel()
+            {
+                success = true,
+                message = "Test",
+                code = 200
+            });
         }
 
-        public void GetTestData(Action<object> callback)
+        public void GetTestData(Action<DataResponseModel> callback)
         {
-            callback?.Invoke(null);
+            callback?.Invoke(new DataResponseModel()
+            {
+                success = true,
+                message = "Test",
+                code = 200
+            });
         }
 
     }

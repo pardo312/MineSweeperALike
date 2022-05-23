@@ -1,5 +1,6 @@
 ﻿using JiufenGames.MineSweeperAlike.Gameplay.Logic;
 using JiufenGames.MineSweeperAlike.SceneManagement;
+using JiufenGames.MineSweeperAlike.UIHelpers;
 using JiufenGames.PopupModule;
 using JiufenPackages.GameManager.Logic;
 using JiufenPackages.SceneFlow.Logic;
@@ -15,6 +16,7 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         EASY = 0,
         MEDIUM = 1,
         HARD = 2,
+        CUSTOM = 3,
     }
 
     public class HomeSceneController : SceneController
@@ -22,16 +24,17 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         #region ----Fields----
         public BGHomeAnimation bGHomeAnimation;
         public TitleHomeAnimation titleHomeAnimation;
+        public HomePanelsController homePanelsController;
         public CustomValuesController customValuesController;
+        public BoardDifficultyModes boardDifficultyModes;
         #endregion ----Fields----
 
         #region ----Methods----
-        public override void Init<T>(T _data, Action<bool> _callback = null)
+        public override void Init(DataResponseModel _data, Action<bool> _callback = null)
         {
             LeanTween.init(2300);
 
             customValuesController.OnCustomValuesPlay += SetCustomDifficultyValues;
-            titleHomeAnimation.a_onEndAnimation += CheckForSavedMatch;
 
             _callback?.Invoke(true);
 
@@ -39,54 +42,44 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
             titleHomeAnimation.Init();
         }
 
-        public void CheckForSavedMatch()
-        {
-            bool gameExist = PlayerPrefs.GetInt(PersistenceConstants.SAVED_BOARD_EXIST, 0) == 1;
-            if (!gameExist)
-                return;
-
-            Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
-            buttonDictionary.Add(PopupManager.ButtonType.BACK_BUTTON, () => { PlayerPrefs.SetInt(PersistenceConstants.SAVED_BOARD_EXIST, 0); });
-            buttonDictionary.Add(PopupManager.ButtonType.CONFIRM_BUTTON, () => GoToGameplay());
-
-            ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("Do you want to load your previous game?", buttonDictionary);
-        }
-
         public void GoToGameplay()
         {
             GameManager.m_instance.GoTo(SceneNames.GAMEPLAY);
         }
 
-        public void GetDifficultyValues(int difficulty)
+        public void CleanBoardDataForDifficutly(int difficulty)
         {
-            int rows = 1;
-            int columns = 1;
-            int numberOfBombs = 1;
-            switch ((Difficulty)difficulty)
+            Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
+            buttonDictionary.Add(PopupManager.ButtonType.BACK_BUTTON, () => { });
+            buttonDictionary.Add(PopupManager.ButtonType.CONFIRM_BUTTON, () =>
             {
-                case Difficulty.EASY:
-                    rows = 8;
-                    columns = 8;
-                    break;
-                case Difficulty.MEDIUM:
-                    rows = 16;
-                    columns = 16;
-                    break;
-                case Difficulty.HARD:
-                    rows = 30;
-                    columns = 16;
-                    break;
-            }
+                DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardData() { difficulty = (Difficulty)difficulty });
+                SetPredifineDifficulty(difficulty);
+            });
+            ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("Do you want to create new game and erase old one?", buttonDictionary);
+        }
 
-            numberOfBombs = (int)((rows * columns) / 6.4f);
-            SetCustomDifficultyValues(rows, columns, numberOfBombs);
+        public void SetPredifineDifficulty(int difficulty)
+        {
+            if (difficulty < boardDifficultyModes.difficulties.Length)
+            {
+                DataManager.m_instance.ReadEvent(DataKeys.SAVE_GAMEPLAY_DIFFICULTY, boardDifficultyModes.difficulties[difficulty]);
+                GoToGameplay();
+            }
+            else
+                Debug.LogError($"Predifine difficulty {difficulty} doesn't exist");
         }
 
         public void SetCustomDifficultyValues(int rows, int columns, int numberOfBombs)
         {
-            PlayerPrefs.SetInt("numRows", rows);
-            PlayerPrefs.SetInt("numColumns", columns);
-            PlayerPrefs.SetInt("numBombs", numberOfBombs);
+            DataManager.m_instance.ReadEvent(DataKeys.SAVE_GAMEPLAY_DIFFICULTY, new BoardDifficulty()
+            {
+                difficulty = Difficulty.CUSTOM,
+                rows = rows,
+                columns = columns,
+                mines = numberOfBombs
+            });
+            GoToGameplay();
         }
 
         public void OnDestroy()
@@ -95,5 +88,6 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         }
         #endregion ----Methods----
     }
+
 
 }

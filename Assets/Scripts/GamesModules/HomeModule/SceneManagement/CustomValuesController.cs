@@ -1,7 +1,10 @@
 ﻿using JiufenGames.MineSweeperAlike.SceneManagement;
+using JiufenGames.PopupModule;
 using JiufenPackages.GameManager.Logic;
 using JiufenPackages.SceneFlow.Logic;
+using JiufenPackages.ServiceLocator;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +21,18 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         #endregion ----Fields----
 
         #region ----Methods----
+        public void CleanBoardDataCustom()
+        {
+            Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
+            buttonDictionary.Add(PopupManager.ButtonType.BACK_BUTTON, () => { });
+            buttonDictionary.Add(PopupManager.ButtonType.CONFIRM_BUTTON, () =>
+            {
+                DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardData() { difficulty = Difficulty.CUSTOM });
+                SendCustomValues();
+            });
+            ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("Do you want to create new game and erase old one?", buttonDictionary);
+        }
+
         public void SendCustomValues()
         {
             OnCustomValuesPlay?.Invoke((int)listOfSliders[0].value, (int)listOfSliders[1].value, (int)listOfSliders[2].value);

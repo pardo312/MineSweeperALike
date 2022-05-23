@@ -9,8 +9,8 @@ namespace JiufenPackages.SceneFlow.Logic
     {
         string m_sceneName { get; }
 
-        void GetData(Action<object> callback);
+        void GetData(Action<DataResponseModel> callback);
 
-        void GetTestData(Action<object> callback);
+        void GetTestData(Action<DataResponseModel> callback);
     }
 }

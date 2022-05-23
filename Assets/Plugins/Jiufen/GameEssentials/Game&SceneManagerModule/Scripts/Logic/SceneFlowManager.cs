@@ -107,14 +107,14 @@ namespace JiufenPackages.SceneFlow.Logic
         public void InitScene(string sceneName)
         {
             if (sceneName != loadingSceneName)
-                initilizables[sceneName].GetData(InitializeSceneController);
+                initilizables[sceneName].GetData(data => InitializeSceneController(data));
         }
 
         /// <summary>
         /// Initialize the scene controller with the data from the initializable and then hide the loading scene.
         /// </summary>
         /// <param name="data"></param>
-        private void InitializeSceneController(object data)
+        private void InitializeSceneController(DataResponseModel data)
         {
             SceneController sceneController = SceneController.Instance;
             sceneController.Init(data, (successLoadingScene) =>
