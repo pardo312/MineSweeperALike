@@ -24,11 +24,12 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
                     GameObject buttonNewGame = panels[i].optionsContainer.GetChild(panels[i].optionsContainer.childCount - 1).gameObject;
 
                     buttonLoad.SetActive(gameExist);
-                    buttonLoad.GetComponent<Button>().onClick.AddListener(() => loadGameEvent?.Invoke(difficulty));
+                    if (gameExist)
+                        buttonLoad.GetComponent<Button>().onClick.AddListener(() => loadGameEvent?.Invoke(difficulty));
 
                     separator.SetActive(gameExist);
 
-                    buttonNewGame.GetComponent<Button>().onClick.AddListener(() => newGameEvent?.Invoke(difficulty));
+                    buttonNewGame.GetComponent<Button>().onClick.AddListener(() => newGameEvent?.Invoke(gameExist ? -difficulty : difficulty));
 
                     if (i == panels.Length - 1)
                         base.ShowWholePanel(_panelRectTransform);

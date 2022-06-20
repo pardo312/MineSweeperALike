@@ -49,14 +49,23 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
 
         public void CleanBoardDataForDifficutly(int difficulty)
         {
-            Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
-            buttonDictionary.Add(PopupManager.ButtonType.BACK_BUTTON, () => { });
-            buttonDictionary.Add(PopupManager.ButtonType.CONFIRM_BUTTON, () =>
+            if (difficulty < 0)
             {
-                DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardData() { difficulty = (Difficulty)difficulty });
+                Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
+                buttonDictionary.Add(PopupManager.ButtonType.BACK_BUTTON, () => { });
+                buttonDictionary.Add(PopupManager.ButtonType.CONFIRM_BUTTON, () =>
+                {
+                    //Difficulty is sent but negative so we know that we have saveGame, we just have to reverse it 
+                    DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardData() { difficulty = (Difficulty)(-difficulty) });
+                    SetPredifineDifficulty(difficulty);
+                });
+                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("Do you want to create new game and erase old one?", buttonDictionary);
+            }
+            else
+            {
+                DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardData() { difficulty = (Difficulty)(difficulty) });
                 SetPredifineDifficulty(difficulty);
-            });
-            ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("Do you want to create new game and erase old one?", buttonDictionary);
+            }
         }
 
         public void SetPredifineDifficulty(int difficulty)
