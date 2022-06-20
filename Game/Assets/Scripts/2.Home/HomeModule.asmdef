@@ -1,0 +1,22 @@
+{
+    "name": "HomeModule",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:626c37e03d90f044096780473d956842",
+        "GUID:3c4c53ce10f40424896d0b1722f390b3",
+        "GUID:88021c900892db94b943e5f3dda36d2a",
+        "GUID:633cf4b20723177489a912ebdcdbfb29",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:9ba0b717238a1d54a82927d23e2091ba"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

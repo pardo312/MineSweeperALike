@@ -2,7 +2,7 @@
     "name": "SoundManagerEditor",
     "rootNamespace": "",
     "references": [
-        "GUID:b2ddf808a516cc549bfa3c5ea6a4be3b"
+        "GUID:24bc4bfe5cb944c4db2c3de50ecd6f41"
     ],
     "includePlatforms": [],
     "excludePlatforms": [
