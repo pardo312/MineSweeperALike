@@ -28,8 +28,7 @@ public class HomeModeDragController : MonoBehaviour
             float panelFinalPos = panelInitPos + panelSize;
             if (scrollRect.horizontalNormalizedPosition >= panelInitPos && scrollRect.horizontalNormalizedPosition <= panelFinalPos)
             {
-                currentPanel = i;
-                scrollRect.horizontalNormalizedPosition = panelInitPos + (panelSize / 2f);
+                scrollRect.horizontalNormalizedPosition = i;
                 break;
             }
         }
