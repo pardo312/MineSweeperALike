@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class HomeModeDragController : MonoBehaviour
@@ -14,29 +15,34 @@ public class HomeModeDragController : MonoBehaviour
 
     private bool isChecking = false;
     private int currentPanel = 0;
-    public void CheckvalueOfScroll(Vector2 scroll)
+    public void CheckvalueOfScroll(BaseEventData data)
     {
         if (isChecking)
             return;
-        if (scroll.x == 0)
-            return;
 
         isChecking = true;
-        if (scroll.x < 0 && currentPanel > 0)
-            currentPanel--;
-        else if (scroll.x > 0 && currentPanel + 1 < panelsRectTransforms.Count)
-            currentPanel++;
-
-        SnapTo(panelsRectTransforms[currentPanel]);
+        float panelSize = 1f / panelsRectTransforms.Count;
+        for (int i = 0; i < panelsRectTransforms.Count; i++)
+        {
+            float panelInitPos = i * panelSize;
+            float panelFinalPos = panelInitPos + panelSize;
+            if (scrollRect.horizontalNormalizedPosition >= panelInitPos && scrollRect.horizontalNormalizedPosition <= panelFinalPos)
+            {
+                currentPanel = i;
+                scrollRect.horizontalNormalizedPosition = panelInitPos + (panelSize / 2f);
+                break;
+            }
+        }
+        isChecking = false;
 
     }
     public void SnapTo(RectTransform target)
     {
         Canvas.ForceUpdateCanvases();
 
-        contentPanel.anchoredPosition =
+        contentPanel.anchoredPosition = new Vector2(1, 0) * (
                 (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position)
-                - (Vector2)scrollRect.transform.InverseTransformPoint(target.position);
+                - (Vector2)scrollRect.transform.InverseTransformPoint(target.position));
     }
     #endregion ----Methods----	
 }
