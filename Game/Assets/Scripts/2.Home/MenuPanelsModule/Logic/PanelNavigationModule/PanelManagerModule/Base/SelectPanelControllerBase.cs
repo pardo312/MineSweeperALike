@@ -30,35 +30,52 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
         public virtual void Init()
         {
             currentOpenedButton = -1;
-
-            ShowWholePanel(this.GetComponent<RectTransform>());
+            soloPanelYMax = this.GetComponent<RectTransform>().sizeDelta.y;
         }
 
-        public virtual void ShowWholePanel(RectTransform _panelRectTransform)
+        public virtual void ShowWholePanel()
         {
+            AnimatePanel(true);
+        }
+        public void HidePanel(Action callback)
+        {
+            AnimatePanel(false, callback);
+        }
+
+        private float soloPanelYMax;
+        public void AnimatePanel(bool showing, Action callback = null)
+        {
+            RectTransform _panelRectTransform = this.GetComponent<RectTransform>();
             isAnimating = true;
 
-            float soloPanelInitY = _panelRectTransform.sizeDelta.y;
-            Vector2 tempSize = _panelRectTransform.sizeDelta;
-            tempSize.y = 0;
-            _panelRectTransform.sizeDelta = tempSize;
+
+            float soloPanelY = _panelRectTransform.sizeDelta.y;
+            if (showing)
+            {
+                Vector2 tempSize = _panelRectTransform.sizeDelta;
+                tempSize.y = 0;
+                _panelRectTransform.sizeDelta = tempSize;
+            }
 
             Transform panelContainer = _panelRectTransform.GetChild(0);
-            LeanTween.value(0, soloPanelInitY, animationTime * 2)
+
+            float initValue = showing ? 0 : soloPanelYMax;
+            float finalValue = showing ? soloPanelYMax : 0;
+
+            LeanTween.value(initValue, finalValue, animationTime * 2)
                      .setEase(LeanTweenType.easeInCubic)
                      .setOnUpdate((float value) =>
                      {
-                         panelContainer.SetParent(_panelRectTransform.parent);
                          Vector2 tempSize = _panelRectTransform.sizeDelta;
                          tempSize.y = value;
                          _panelRectTransform.sizeDelta = tempSize;
-                         panelContainer.SetParent(_panelRectTransform);
                      }).
-                     setOnComplete(() => isAnimating = false);
-        }
-        public void HidePanel()
-        {
-            //TODO
+                     setOnComplete(() =>
+                     {
+                         callback?.Invoke();
+                         isAnimating = false;
+                     });
+
         }
         #endregion Init class
 

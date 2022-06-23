@@ -10,7 +10,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
         public UnityEvent<int> loadGameEvent;
         public UnityEvent<int> newGameEvent;
 
-        public override void ShowWholePanel(RectTransform _panelRectTransform)
+        public override void ShowWholePanel()
         {
             for (int i = 0; i < panels.Length; i++)
             {
@@ -32,7 +32,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
                     buttonNewGame.GetComponent<Button>().onClick.AddListener(() => newGameEvent?.Invoke(gameExist ? -difficulty : difficulty));
 
                     if (i == panels.Length - 1)
-                        base.ShowWholePanel(_panelRectTransform);
+                        base.ShowWholePanel();
                 });
             }
         }

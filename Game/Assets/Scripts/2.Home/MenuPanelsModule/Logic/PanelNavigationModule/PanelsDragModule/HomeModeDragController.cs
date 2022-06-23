@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +13,7 @@ public class HomeModeDragController : MonoBehaviour
     public ScrollRect scrollRect;
     public RectTransform contentPanel;
     public List<RectTransform> panelsRectTransforms;
+    public Action<int> onChangeMode;
 
     private bool isChecking = false;
     private int currentPanel = 0;
@@ -29,19 +31,15 @@ public class HomeModeDragController : MonoBehaviour
             if (scrollRect.horizontalNormalizedPosition >= panelInitPos && scrollRect.horizontalNormalizedPosition <= panelFinalPos)
             {
                 scrollRect.horizontalNormalizedPosition = i;
+                if (i != currentPanel)
+                {
+                    currentPanel = i;
+                    onChangeMode?.Invoke(currentPanel);
+                }
                 break;
             }
         }
         isChecking = false;
-
-    }
-    public void SnapTo(RectTransform target)
-    {
-        Canvas.ForceUpdateCanvases();
-
-        contentPanel.anchoredPosition = new Vector2(1, 0) * (
-                (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position)
-                - (Vector2)scrollRect.transform.InverseTransformPoint(target.position));
     }
     #endregion ----Methods----	
 }

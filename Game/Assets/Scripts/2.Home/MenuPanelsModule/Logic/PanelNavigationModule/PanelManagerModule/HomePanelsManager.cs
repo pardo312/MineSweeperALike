@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,14 +12,22 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
         [SerializeField] private RectTransform m_modeSelectContainer;
         [SerializeField] private SelectPanelControllerBase[] m_panelControllers;
         [SerializeField] private float perAnimTime = 1f;
+        [SerializeField] private HomeModeDragController homeModeDragController;
 
-        private int currentPanelController;
+        private int currentPanelController = 0;
         #endregion ----Fields----
 
         #region ----Methods----	
+        #region Init
+        public void Start()
+        {
+            m_panelControllers.ToList().ForEach((item) => item.Init());
+            homeModeDragController.onChangeMode += ShowModeOptions;
+        }
+
         public void ShowModeSelectContainer()
         {
-            HidePlayButton(ShowOptions);
+            HidePlayButton(ShowInitMode);
         }
 
         public void HidePlayButton(Action onComplete = null)
@@ -32,7 +41,7 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
                             m_playButton.gameObject.SetActive(false);
                         });
         }
-        public void ShowOptions()
+        public void ShowInitMode()
         {
             float initYPosition = m_modeSelectContainer.anchoredPosition.y;
             m_modeSelectContainer.position = new Vector2(m_modeSelectContainer.position.x, m_playButton.position.y);
@@ -40,10 +49,32 @@ namespace JiufenGames.MineSweeperAlike.UIHelpers
 
             m_modeSelectContainer.LeanMoveY(initYPosition, perAnimTime).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
             {
-                m_panelControllers[currentPanelController].gameObject.SetActive(true);
-                m_panelControllers[currentPanelController].Init();
+                ShowPanel();
             });
         }
+        #endregion Init
+
+        #region Show other panel
+        public void ShowModeOptions(int newMode)
+        {
+            if (newMode == currentPanelController)
+                return;
+
+            m_panelControllers[currentPanelController].HidePanel(() =>
+            {
+                m_panelControllers[currentPanelController].gameObject.SetActive(false);
+                currentPanelController = newMode;
+                ShowPanel();
+            });
+
+        }
+
+        public void ShowPanel()
+        {
+            m_panelControllers[currentPanelController].gameObject.SetActive(true);
+            m_panelControllers[currentPanelController].ShowWholePanel();
+        }
+        #endregion Show other panel
         #endregion ----Methods----	
     }
 }
