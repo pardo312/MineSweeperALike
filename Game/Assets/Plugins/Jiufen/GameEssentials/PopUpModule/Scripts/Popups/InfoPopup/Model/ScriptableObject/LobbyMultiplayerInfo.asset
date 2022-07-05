@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a72a12b3baae7e478fdb9276bc7d5a5, type: 3}
+  m_Name: LobbyMultiplayerInfo
+  m_EditorClassIdentifier: GetaScripts::LobbyMultiplayerInfo
+  lobbyMultiplayerMessage:
+  - Key: loading
+    Message: Loading
+    NeedBackOrContinueButton: 0
+    IsContinueButton: 0
+  - Key: failUserChar
+    Message: User especial character missing
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failEmailVerified
+    Message: Email is not verified. Please check your email inbox.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: InvalidEmail
+    Message: Invalid email, It shouldn't be that short
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failTryLater
+    Message: Please Try Again Later
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failEmail
+    Message: Email was wrong, please try again
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failPsw
+    Message: Password was wrong, please try again
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: InvalidPassword
+    Message: Invalid password, It shouldn't be that short
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: passwordEmpty
+    Message: The password is empty, please fill it
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: InvalidUserMessage
+    Message: Invalid user, It shouldn't be that short
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failEmailAlready
+    Message: The email is already in use
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failUserAlready
+    Message: The user  is already in use
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failCode
+    Message: Code was not correct
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failPsw
+    Message: Password was not correct
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failEmailNotFnd
+    Message: Email Wasn't Found, please verify it.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failEmailVerified
+    Message: Email is not verified. Please check your email inbox.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failTournamentRegisterClosed
+    Message: Tournament is closed for joining.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: failTournamentFull
+    Message: Tournament is full
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: tournamentNotActiveYet
+    Message: The tournament is not active currently.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: noCurrentSeasonForGameId
+    Message: There is no current season for the GameId provided
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: srchMatch
+    Message: Finding match... Please wait.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: matchFound
+    Message: Match Found!
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: dataIsNull
+    Message: The data sent is null.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: srchMatch
+    Message: Looking for a Match
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: matchFound
+    Message: Match Found Prerare For Battle
+    NeedBackOrContinueButton: 0
+    IsContinueButton: 0
+  - Key: noWallet
+    Message: 'You don''t have a wallet yet. '
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0
+  - Key: userAlreadyInTournament
+    Message: User is already registered in this tournament.
+    NeedBackOrContinueButton: 1
+    IsContinueButton: 0

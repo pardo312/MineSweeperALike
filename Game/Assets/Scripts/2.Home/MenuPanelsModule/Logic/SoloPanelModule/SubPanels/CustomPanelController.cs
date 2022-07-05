@@ -21,9 +21,9 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
         #region ----Methods----
         public void CleanBoardDataCustom()
         {
-            Dictionary<PopupManager.ButtonType, Action> buttonDictionary = new Dictionary<PopupManager.ButtonType, Action>();
-            buttonDictionary.Add(PopupManager.ButtonType.BACK_BUTTON, () => { });
-            buttonDictionary.Add(PopupManager.ButtonType.CONFIRM_BUTTON, () =>
+            Dictionary<ButtonType, Action> buttonDictionary = new Dictionary<ButtonType, Action>();
+            buttonDictionary.Add(ButtonType.BACK, () => { });
+            buttonDictionary.Add(ButtonType.CONFIRM, () =>
             {
                 DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardSaveData() { difficulty = BoardDifficultyEnum.CUSTOM });
                 SendCustomValues();

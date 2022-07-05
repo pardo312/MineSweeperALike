@@ -8,7 +8,7 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
 {
     public class GameplaySceneController : SceneController
     {
-        public GameController gameplayController;
+        public GameplayController gameplayController;
         public override void Init(DataResponseModel _dataResponse, Action<bool> _callback = null)
         {
             dynamic responseData = _dataResponse.data;
@@ -19,6 +19,7 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
             BoardSaveData boardData = boardDataModel.success ? (BoardSaveData)(boardDataModel.data) : new BoardSaveData();
             _callback?.Invoke(true);
             gameplayController.Init((BoardDifficulty)difficultyModel.data, boardDataModel.success, boardData);
+            gameplayController.goBackToHome += GoBackHome;
         }
 
         public void GoBackHome()
