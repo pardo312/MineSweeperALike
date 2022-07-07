@@ -12,6 +12,10 @@ namespace JiufenGames.PopupModule
     {
         #region Fields
         public GameObject GameObjectPopup => this.gameObject;
+
+        [Header("Animations")]
+        [SerializeField, Range(.1f, 5)] private protected float animationTime = 0.5f;
+
         [Header("Parents & Positions")]
         [SerializeField] private protected RectTransform RectParentInput;
         [SerializeField] private protected RectTransform TargetAnimationShow;
@@ -53,7 +57,6 @@ namespace JiufenGames.PopupModule
                         if (EventSystem.current.currentSelectedGameObject != ViewEncryptedTextToggle.gameObject)
                         {
                             IsHiding = true;
-                            PopUpManager.Instance.HidePopup();
                             InputPopupMessageData.onConfirmButtonCallback?.Invoke();
                         }
                         else
@@ -73,7 +76,6 @@ namespace JiufenGames.PopupModule
 
         public void HideMessagePopup(Action onFinishHiding = null)
         {
-            float animationTime = 0.5f;
             LeanTween.scale(RectParentInput, Vector2.one * 0.6f, animationTime).setEase(LeanTweenType.easeInBack).setFrom(Vector2.one);
             LeanTween.moveLocal(RectParentInput.gameObject, TargetAnimationHide, animationTime).setEase(LeanTweenType.easeInBack).setOnComplete(() =>
               {
@@ -89,7 +91,6 @@ namespace JiufenGames.PopupModule
             InputField.Select();
             InputField.ActivateInputField();
 
-            float animationTime = 0.5f;
             LeanTween.scale(RectParentInput, Vector2.one, animationTime).setEase(LeanTweenType.easeOutBack).setFrom(Vector2.one * 0.6f);
             LeanTween.moveLocal(RectParentInput.gameObject, TargetAnimationShow.localPosition, animationTime).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
               {
@@ -104,7 +105,7 @@ namespace JiufenGames.PopupModule
             InputField.text = InputPopupMessageData.originalInputField.text;
             InputPlaceHolder.text = InputPopupMessageData.labelText;
             InputField.contentType = InputPopupMessageData.originalInputField.contentType;
-                ViewEncryptedTextToggle.gameObject.SetActive(false);
+            ViewEncryptedTextToggle.gameObject.SetActive(false);
             if (InputPopupMessageData.shouldEncryptText)
             {
                 //ViewEncryptedTextToggle.gameObject.SetActive(true);

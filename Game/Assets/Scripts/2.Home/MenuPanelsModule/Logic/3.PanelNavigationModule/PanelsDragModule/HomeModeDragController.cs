@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ public class HomeModeDragController : MonoBehaviour
     #region ----Methods----	
     public ScrollRect scrollRect;
     public RectTransform contentPanel;
-    public List<RectTransform> panelsRectTransforms;
+    public List<Button> modeButtons;
     public Action<int> onChangeMode;
 
     private bool isChecking = false;
@@ -23,17 +24,20 @@ public class HomeModeDragController : MonoBehaviour
             return;
 
         isChecking = true;
-        float panelSize = 1f / panelsRectTransforms.Count;
-        for (int i = 0; i < panelsRectTransforms.Count; i++)
+        float buttonSize = 1f / modeButtons.Count;
+
+        for (int i = 0; i < modeButtons.Count; i++)
         {
-            float panelInitPos = i * panelSize;
-            float panelFinalPos = panelInitPos + panelSize;
-            if (scrollRect.horizontalNormalizedPosition >= panelInitPos && scrollRect.horizontalNormalizedPosition <= panelFinalPos)
+            float buttonInitPos = i * buttonSize;
+            float buttonFinalPos = buttonInitPos + buttonSize;
+            if (scrollRect.horizontalNormalizedPosition.IsBetween(buttonFinalPos, buttonInitPos))
             {
                 scrollRect.horizontalNormalizedPosition = i;
                 if (i != currentPanel)
                 {
+                    modeButtons[currentPanel].interactable = false;
                     currentPanel = i;
+                    modeButtons[i].interactable = true;
                     onChangeMode?.Invoke(currentPanel);
                 }
                 break;

@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cd1c000541263c4ea26d2b67bec624b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeOfAnimation: 0.5
+  timeOfAnimation: 0.3
   PopUpMessageText: {fileID: 3684590177141326833}
   Buttons:
   - {fileID: 3684590178274351896}

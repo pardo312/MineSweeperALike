@@ -82,6 +82,9 @@ namespace JiufenGames.PopupModule
                 return;
             hasPopupOpen = true;
 
+            Action onConfirmButtonCallback = onBackButtonCallback;
+            onBackButtonCallback = () => HidePopup(onConfirmButtonCallback);
+
             ShowWidget(TypeOfPopup.INPUT);
             CurrentPopUpSubMessageController.SetPopupMessage(new InputPopupMessageData()
             {
