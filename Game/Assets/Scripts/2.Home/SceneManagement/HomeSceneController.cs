@@ -78,15 +78,18 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
                 Debug.LogError($"Predifine difficulty {difficulty} doesn't exist");
         }
 
-        public void SetCustomDifficultyValues(int rows, int columns, int numberOfBombs)
+        public void SetCustomDifficultyValues(int rows, int columns, int numberOfBombs, bool isLoadData = false)
         {
-            DataManager.m_instance.ReadEvent(DataKeys.SAVE_GAMEPLAY_DIFFICULTY, new BoardDifficulty()
+            if (!isLoadData)
             {
-                difficulty = BoardDifficultyEnum.CUSTOM,
-                rows = rows,
-                columns = columns,
-                mines = numberOfBombs
-            });
+                DataManager.m_instance.ReadEvent(DataKeys.SAVE_GAMEPLAY_DIFFICULTY, new BoardDifficulty()
+                {
+                    difficulty = BoardDifficultyEnum.CUSTOM,
+                    rows = rows,
+                    columns = columns,
+                    mines = numberOfBombs
+                });
+            }
             GoToGameplay();
         }
 

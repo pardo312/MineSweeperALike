@@ -955,17 +955,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982723035}
   m_CullTransparentMesh: 1
---- !u!114 &1117083826 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 15657883326334830, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-  m_PrefabInstance: {fileID: 15657884958053253}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1140928372 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 15657883817147633, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
@@ -1676,6 +1665,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1642567090}
     m_Modifications:
+    - target: {fileID: 15657883161580273, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883161580273, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 419
+      objectReference: {fileID: 0}
     - target: {fileID: 15657883258539901, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1684,17 +1681,21 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1146745298}
-    - target: {fileID: 15657883326334824, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 1117083826}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: newGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
+      propertyPath: panels.Array.data[3].containerMinY
+      value: -1900
       objectReference: {fileID: 0}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: loadGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
+      propertyPath: panels.Array.data[3].middlePanelSizeY
+      value: 2300
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: newCustomGameEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: loadCustomGameEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
       propertyPath: newGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1705,41 +1706,133 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1146745298}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: newGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CleanBoardDataForDifficutly
+      propertyPath: newCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: loadGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetPredifineDifficulty
+      propertyPath: loadCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: newGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: JiufenGames.MineSweeperAlike.HomeModule.HomeSceneController, HomeModule
-      objectReference: {fileID: 0}
+      propertyPath: newCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 759102067}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: loadGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: JiufenGames.MineSweeperAlike.HomeModule.HomeSceneController, HomeModule
-      objectReference: {fileID: 0}
+      propertyPath: loadCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 759102067}
     - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: newGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      propertyPath: newCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: loadCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: newCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CleanBoardDataCustom
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: loadCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SendCustomValues
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: newCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: JiufenGames.MineSweeperAlike.HomeModule.CustomPanelController, HomeModule
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: loadCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: JiufenGames.MineSweeperAlike.HomeModule.CustomPanelController, HomeModule
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: newCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883422205342, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: loadCustomGameEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 759102067}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SendCustomValues
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: JiufenGames.MineSweeperAlike.HomeModule.CustomPanelController, HomeModule
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657883653983822, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 15657883839135063, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1146745298}
-    - target: {fileID: 15657884017557404, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 15657884017557404, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1146745298}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 759102067}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 759102067}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CleanBoardDataCustom
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SendCustomValues
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: JiufenGames.MineSweeperAlike.HomeModule.CustomPanelController, HomeModule
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657884157529172, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 15657884290791622, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1677
+      objectReference: {fileID: 0}
     - target: {fileID: 15657885149827524, guid: 0ff8d073d1596be4b8f138416abb29ee, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

@@ -20,7 +20,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         }
 
         [ContextMenu("Do it!")]
-        public BoardSaveData SaveMatch()
+        public BoardSaveData SaveMatch(BoardDifficultyEnum difficulty)
         {
             List<Vector2Int> minesPos = new List<Vector2Int>();
             boardController.minesPositions.ForEach((mine) => minesPos.Add(new Vector2Int(mine.m_tileRow, mine.m_tileColumn)));
@@ -42,7 +42,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
             bool isCustom = boardController.m_numberOfColumns > 32 || boardController.m_numberOfRows > 32;
             BoardSaveData boardData = new BoardSaveData()
             {
-                difficulty = isCustom ? BoardDifficultyEnum.CUSTOM : (BoardDifficultyEnum)((boardController.m_numberOfColumns / 8) - 1),
+                difficulty = difficulty,
                 flaggedPositions = flaggedPos,
                 minesPositions = minesPos,
                 sweepedTilePositions = sweepPos

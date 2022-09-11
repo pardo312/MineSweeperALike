@@ -22,6 +22,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         [SerializeField] private SweepController m_sweepController;
         [SerializeField] private CameraZoomController m_cameraZoomController;
         [SerializeField] private BoardSaveDataController m_boardPersistenceController;
+        private BoardDifficultyEnum currentDifficulty;
         public Action goBackToHome;
 
         private bool isReady = false;
@@ -41,6 +42,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
                 _loadingSavedMatch = gameExist,
                 _squaredTiles = true
             };
+            currentDifficulty = difficulty.difficulty;
 
             m_boardController.a_OnBoardCreated += () =>
             {
@@ -143,7 +145,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
         public void SaveBoard()
         {
-            BoardSaveData boardData = m_boardPersistenceController.SaveMatch();
+            BoardSaveData boardData = m_boardPersistenceController.SaveMatch(currentDifficulty);
             DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, boardData);
         }
 

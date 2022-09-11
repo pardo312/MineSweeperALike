@@ -12,28 +12,37 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
     public class CustomPanelController : MonoBehaviour
     {
         #region ----Fields----
-        public Action<int, int, int> OnCustomValuesPlay;
+        public Action<int, int, int, bool> OnCustomValuesPlay;
         public CustomValuesView view;
         //0,1 -> row,col ; 2-> numOfMines
         public Slider[] listOfSliders;
         #endregion ----Fields----
 
         #region ----Methods----
-        public void CleanBoardDataCustom()
+        public void CleanBoardDataCustom(int dataExist)
         {
-            Dictionary<ButtonType, Action> buttonDictionary = new Dictionary<ButtonType, Action>();
-            buttonDictionary.Add(ButtonType.BACK, () => { });
-            buttonDictionary.Add(ButtonType.CONFIRM, () =>
+            if (dataExist < 0)
+            {
+                Dictionary<ButtonType, Action> buttonDictionary = new Dictionary<ButtonType, Action>();
+                buttonDictionary.Add(ButtonType.BACK, () => { });
+                buttonDictionary.Add(ButtonType.CONFIRM, () =>
+                {
+                    DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardSaveData() { difficulty = BoardDifficultyEnum.CUSTOM });
+                    SendCustomValues(0);
+                    ServiceLocator.m_Instance.GetService<IPopupManager>().HidePopup();
+                });
+                ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("Do you want to create new game and erase old one?", buttonDictionary);
+            }
+            else
             {
                 DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, new BoardSaveData() { difficulty = BoardDifficultyEnum.CUSTOM });
-                SendCustomValues();
-            });
-            ServiceLocator.m_Instance.GetService<IPopupManager>().ShowInfoPopup("Do you want to create new game and erase old one?", buttonDictionary);
+                SendCustomValues(0);
+            }
         }
 
-        public void SendCustomValues()
+        public void SendCustomValues(int isOldData)
         {
-            OnCustomValuesPlay?.Invoke((int)listOfSliders[0].value, (int)listOfSliders[1].value, (int)listOfSliders[2].value);
+            OnCustomValuesPlay?.Invoke((int)listOfSliders[0].value, (int)listOfSliders[1].value, (int)listOfSliders[2].value, isOldData != 0);
         }
 
         private void Update()
