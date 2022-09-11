@@ -29,6 +29,7 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
 
         public void GoBackHome()
         {
+            gameplayController.SaveBoard();
             GameManager.m_instance.GoTo(SceneNames.HOME);
         }
     }

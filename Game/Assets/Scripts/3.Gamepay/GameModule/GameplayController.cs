@@ -141,7 +141,7 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
 
         #region Persistence
 
-        private void SaveBoard()
+        public void SaveBoard()
         {
             BoardSaveData boardData = m_boardPersistenceController.SaveMatch();
             DataManager.m_instance.ReadEvent(DataKeys.SAVE_BOARD_DATA, boardData);
