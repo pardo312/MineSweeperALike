@@ -1,3 +1,4 @@
+using Jiufen.Audio;
 using JiufenGames.Board.Logic;
 using JiufenGames.MineSweeperAlike.Board.Logic;
 using JiufenGames.MineSweeperAlike.HomeModule;
@@ -96,6 +97,8 @@ namespace JiufenGames.MineSweeperAlike.Gameplay.Logic
         private bool gameEnded = false;
         private void EndGame(bool won)
         {
+            if (!won)
+                AudioManager.PlayAudio("SFX_BOMB");
             if (gameEnded)
                 return;
             gameEnded = true;

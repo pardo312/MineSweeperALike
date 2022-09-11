@@ -1,4 +1,5 @@
-﻿using JiufenGames.MineSweeperAlike.Gameplay.Logic;
+﻿using Jiufen.Audio;
+using JiufenGames.MineSweeperAlike.Gameplay.Logic;
 using JiufenGames.MineSweeperAlike.SceneManagement;
 using JiufenGames.MineSweeperAlike.UIHelpers;
 using JiufenGames.PopupModule;
@@ -33,6 +34,11 @@ namespace JiufenGames.MineSweeperAlike.HomeModule
 
             bGHomeAnimation.Init();
             titleHomeAnimation.Init();
+        }
+
+        public void Start()
+        {
+            AudioManager.PlayAudio("OST_HOME", new AudioJobOptions() { loop = true, volume = 0.1f, fadeIn = new AudioFadeInfo(true, 3) });
         }
 
         public void GoToGameplay()

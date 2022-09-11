@@ -30,7 +30,7 @@ public class HomeModeDragController : MonoBehaviour
         {
             float buttonInitPos = i * buttonSize;
             float buttonFinalPos = buttonInitPos + buttonSize;
-            if (scrollRect.horizontalNormalizedPosition.IsBetween(buttonInitPos, buttonFinalPos))
+            if (scrollRect.horizontalNormalizedPosition.IsBetween(buttonInitPos-.1f, buttonFinalPos+.1f))
             {
                 scrollRect.horizontalNormalizedPosition = i;
                 if (i != currentPanel)

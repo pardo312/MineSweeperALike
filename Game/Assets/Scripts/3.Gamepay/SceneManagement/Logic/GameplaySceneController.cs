@@ -1,3 +1,4 @@
+using Jiufen.Audio;
 using JiufenGames.MineSweeperAlike.Gameplay.Logic;
 using JiufenGames.MineSweeperAlike.HomeModule;
 using JiufenPackages.GameManager.Logic;
@@ -20,6 +21,10 @@ namespace JiufenGames.MineSweeperAlike.SceneManagement
             _callback?.Invoke(true);
             gameplayController.Init((BoardDifficulty)difficultyModel.data, boardDataModel.success, boardData);
             gameplayController.goBackToHome += GoBackHome;
+        }
+        public void Start()
+        {
+            AudioManager.PlayAudio("OST_GAMEPLAY", new AudioJobOptions() { loop = true, volume = 0.1f, fadeIn = new AudioFadeInfo(true, 3) });
         }
 
         public void GoBackHome()
